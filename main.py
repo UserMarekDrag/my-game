@@ -1,6 +1,8 @@
 import pygame
 import os
 
+pygame.font.init()
+
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Game!")
@@ -9,6 +11,9 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
+
+HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
+WINNER_FONT = pygame.font.SysFont('comicsans', 100)
 
 FPS = 60
 PLAYER_WIDTH, PLAYER_HEIGHT = 80, 160
@@ -31,8 +36,17 @@ BACKGROUND = pygame.transform.scale(pygame.image.load(
     os.path.join('Assets', 'background.png')), (WIDTH, HEIGHT))
 
 
-def draw_windows(player, enemy, enemy_bullets, player_bullets):
+def draw_windows(player, enemy, enemy_bullets, player_bullets, enemy_health, player_health):
     WIN.blit(BACKGROUND, (0, 0))
+
+    enemy_health_text = HEALTH_FONT.render(
+        "Heath: " + str(enemy_health), 1, WHITE)
+    player_health_text = HEALTH_FONT.render(
+        "Heath: " + str(player_health), 1, WHITE)
+
+    WIN.blit(enemy_health_text, (WIDTH - enemy_health_text.get_width() - 10, 10))
+    WIN.blit(player_health_text, (10, 10))
+
     WIN.blit(PLAYER, (player.x, player.y))
     WIN.blit(ENEMY, (enemy.x, enemy.y))
 
@@ -89,12 +103,23 @@ def handle_bullets(player_bullets, player, enemy_bullets, enemy):
             enemy_bullets.remove(bullet)
 
 
+def draw_winner(winner_text):
+    draw_text = WINNER_FONT.render(winner_text, 1, WHITE)
+    WIN.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2,
+             HEIGHT / 2 - draw_text.get_height() / 2))
+    pygame.display.update()
+    pygame.time.delay(5000)
+
+
 def main():
     player = pygame.Rect(300, 150, PLAYER_WIDTH, PLAYER_HEIGHT)
     enemy = pygame.Rect(700, 150, PLAYER_WIDTH, PLAYER_HEIGHT)
 
     player_bullets = []
     enemy_bullets = []
+
+    player_health = 5
+    enemy_health = 3
 
     clock = pygame.time.Clock()
     run = True
@@ -107,13 +132,29 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_z and len(player_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(
-                        player.x + player.width, player.y + player.height//2 - 2, 10, 5)
+                        player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
                     player_bullets.append(bullet)
 
-                if (player.x, player.y) != (enemy.x, enemy.y) and len(enemy_bullets) < MAX_BULLETS:
+                if len(enemy_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(
-                        enemy.x, enemy.y + enemy.height//2 - 2, 10, 5)
+                        enemy.x, enemy.y + enemy.height // 2 - 2, 10, 5)
                     enemy_bullets.append(bullet)
+
+            if event.type == ENEMY_HIT:
+                enemy_health -= 1
+            if event.type == PLAYER_HIT:
+                player_health -= 1
+
+        winner_text = ""
+        if enemy_health <= 0:
+            winner_text = 'Player Wins!'
+
+        if player_health <= 0:
+            winner_text = 'Enemy Wins!'
+
+        if winner_text != "":
+            draw_winner(winner_text)
+            break
 
         keys_pressed = pygame.key.get_pressed()
 
@@ -122,7 +163,7 @@ def main():
 
         handle_bullets(player_bullets, player, enemy_bullets, enemy)
 
-        draw_windows(player, enemy, enemy_bullets, player_bullets)
+        draw_windows(player, enemy, enemy_bullets, player_bullets, enemy_health, player_health)
 
     pygame.quit()
 
