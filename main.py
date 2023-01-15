@@ -2,6 +2,7 @@ import pygame
 import os
 
 pygame.font.init()
+pygame.mixer.init()
 
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -12,12 +13,17 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 
+BULLET_HIT_SOUND = pygame.mixer.Sound(
+    os.path.join('Assets', 'Grenade+1.mp3'))
+BULLET_FIRE_SOUND = pygame.mixer.Sound(
+    os.path.join('Assets', 'Gun+Silencer.mp3'))
+
 HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
 WINNER_FONT = pygame.font.SysFont('comicsans', 100)
 
 FPS = 60
 PLAYER_WIDTH, PLAYER_HEIGHT = 80, 160
-VEL_PLAYER = 5
+VEL_PLAYER = 4
 VEL_ENEMY = 2
 BULLET_VEL = 5
 MAX_BULLETS = 3
@@ -108,7 +114,7 @@ def draw_winner(winner_text):
     WIN.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2,
              HEIGHT / 2 - draw_text.get_height() / 2))
     pygame.display.update()
-    pygame.time.delay(5000)
+    pygame.time.delay(3000)
 
 
 def main():
@@ -119,7 +125,7 @@ def main():
     enemy_bullets = []
 
     player_health = 5
-    enemy_health = 3
+    enemy_health = 5
 
     clock = pygame.time.Clock()
     run = True
@@ -134,16 +140,21 @@ def main():
                     bullet = pygame.Rect(
                         player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
                     player_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
 
                 if len(enemy_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(
                         enemy.x, enemy.y + enemy.height // 2 - 2, 10, 5)
                     enemy_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
 
             if event.type == ENEMY_HIT:
                 enemy_health -= 1
+                BULLET_HIT_SOUND.play()
+
             if event.type == PLAYER_HIT:
                 player_health -= 1
+                BULLET_HIT_SOUND.play()
 
         winner_text = ""
         if enemy_health <= 0:
