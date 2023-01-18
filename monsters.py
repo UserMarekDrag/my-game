@@ -4,22 +4,14 @@ from config import *
 from sounds import *
 
 
-class Creature(pygame.sprite.Sprite):
-    # __SIZE_WIDTH = 20
-    # __SIZE_HEIGHT = 40
-    __VEL = 4
-    __BULLET_VEL = 5
-    __MAX_BULLETS = 3
-    __CREATURE_HIT = pygame.USEREVENT + 1
-    __ENEMY_HIT = pygame.USEREVENT + 2
+class Creature:
 
     def __init__(self, creature_type, image_name, x, y):
         self.creature_type = creature_type
-        self.VEL = 4
 
         self.image_name = image_name
-        self.SIZE_WIDTH = 20
-        self.SIZE_HEIGHT = 40
+        self.SIZE_WIDTH = 40
+        self.SIZE_HEIGHT = 80
 
         self.rect = pygame.Rect(x, y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
         self.x = x
@@ -30,23 +22,20 @@ class Creature(pygame.sprite.Sprite):
         self.CREATURE = pygame.transform.scale(
             self.CREATURE_IMAGE, (self.SIZE_WIDTH, self.SIZE_HEIGHT))
 
-    def shoot(self, creature, creature_bullets):
-        if len(creature_bullets) < self.__MAX_BULLETS:
-            bullet = pygame.Rect(
-                creature.x + creature.width, creature.y + creature.height // 2 - 2, 10, 5)
-            creature_bullets.append(bullet)
-            BULLET_FIRE_SOUND.play()
+    def hit_enemy(self, enemy_health):
+        enemy_health -= 1
+        BULLET_HIT_SOUND.play()
+        return enemy_health
 
-    def handle_bullets(self, creature_bullets, enemy):
-        for bullet in creature_bullets:
-            bullet.x -= self.__BULLET_VEL
-            if enemy.colliderect(bullet):
-                pygame.event.post(pygame.event.Event(self.__ENEMY_HIT))
-                creature_bullets.remove(bullet)
-            elif bullet.x > WIDTH:
-                creature_bullets.remove(bullet)
-            elif bullet.x < 0:
-                creature_bullets.remove(bullet)
+    def health_draw(self, health, win, height, name):
+        health_text = HEALTH_FONT.render(
+            f"{str(name)} Heath: " + str(health), True, WHITE)
+
+        win.blit(health_text, (10, height))
+        # self.draw_update()
+
+    def draw_update(self):
+        pygame.display.update()
 
 
 class Boss(Creature):
@@ -54,17 +43,46 @@ class Boss(Creature):
     __BOSS_HIT = pygame.USEREVENT + 2
 
     def __init__(self):
-        super().__init__('Boss', self.__IMAGE_NAME)
+        self.FIRST_POSITION_X = 700
+        self.FIRST_POSITION_Y = 150
+        super().__init__(
+            'Boss', self.__IMAGE_NAME, self.FIRST_POSITION_X, self.FIRST_POSITION_Y)
+        self.boss_bullets = []
 
     def auto_handle_movement(self, monster, hero):
         if hero.x > monster.x:
-            monster.x += self.__VEL
+            monster.x += VEL_BOSS
         if hero.x < monster.x:
-            monster.x -= self.__VEL
+            monster.x -= VEL_BOSS
         if hero.y > monster.y:
-            monster.y += self.__VEL
+            monster.y += VEL_BOSS
         if hero.y < monster.y:
-            monster.y -= self.__VEL
+            monster.y -= VEL_BOSS
+
+    def shoot(self, boss):
+        if len(self.boss_bullets) < MAX_BULLETS:
+            bullet = pygame.Rect(
+                boss.x + boss.width, boss.y + boss.height // 2 - 2, 10, 5)
+            self.boss_bullets.append(bullet)
+            BULLET_FIRE_SOUND.play()
+
+    def handle_bullets(self, enemy, win):
+        for bullet in self.boss_bullets:
+            bullet.x -= BULLET_VEL
+            if enemy.colliderect(bullet):
+                pygame.event.post(pygame.event.Event(BOSS_HIT))
+                self.boss_bullets.remove(bullet)
+            elif bullet.x > WIDTH:
+                self.boss_bullets.remove(bullet)
+            elif bullet.x < 0:
+                self.boss_bullets.remove(bullet)
+        self.draw_bullets(win)
+
+    def draw_bullets(self, win):
+        for bullet in self.boss_bullets:
+            pygame.draw.rect(win, RED, bullet)
+
+        pygame.display.update()
 
 
 class Monster(Creature):
@@ -74,10 +92,10 @@ class Monster(Creature):
 
     def auto_handle_movement(self, monster, hero):
         if hero.x > monster.x:
-            monster.x += self.__VEL
+            monster.x += self.VEL_MONSTER
         if hero.x < monster.x:
-            monster.x -= self.__VEL
+            monster.x -= self.VEL_MONSTER
         if hero.y > monster.y:
-            monster.y += self.__VEL
+            monster.y += self.VEL_MONSTER
         if hero.y < monster.y:
-            monster.y -= self.__VEL
+            monster.y -= self.VEL_MONSTER
