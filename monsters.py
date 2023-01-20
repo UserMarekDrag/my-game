@@ -6,21 +6,19 @@ from sounds import *
 
 class Creature:
 
-    def __init__(self, creature_type, image_name, x, y):
+    def __init__(self, creature_type, image_name, x, y, size_width, size_height):
         self.creature_type = creature_type
-
         self.image_name = image_name
-        self.SIZE_WIDTH = 40
-        self.SIZE_HEIGHT = 80
-
-        self.rect = pygame.Rect(x, y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
+        self.size_width = size_width
+        self.size_height = size_height
+        self.rect = pygame.Rect(x, y, size_width, size_height)
         self.x = x
         self.y = y
 
         self.CREATURE_IMAGE = pygame.image.load(
             os.path.join('Assets', self.image_name))
         self.CREATURE = pygame.transform.scale(
-            self.CREATURE_IMAGE, (self.SIZE_WIDTH, self.SIZE_HEIGHT))
+            self.CREATURE_IMAGE, (self.size_width, self.size_height))
 
     def hit_enemy(self, enemy_health):
         enemy_health -= 1
@@ -32,32 +30,73 @@ class Creature:
             f"{str(name)} Heath: " + str(health), True, WHITE)
 
         win.blit(health_text, (10, height))
-        # self.draw_update()
 
     def draw_update(self):
         pygame.display.update()
 
+    def collision_with_enemy(self, player, enemy, player_health, enemy_health):
+        collide = pygame.Rect.colliderect(player, enemy)
+
+        if collide:
+            if player.x < enemy.x and player.x > 10:
+                player.x -= COLLISION_VEL
+                pygame.time.wait(100)
+            elif player.x > enemy.x and player.x < (WIDTH - 40):
+                player.x += COLLISION_VEL
+                pygame.time.wait(100)
+            elif player.y < enemy.y and player.y > 20:
+                player.y -= COLLISION_VEL
+                pygame.time.wait(100)
+            elif player.y > enemy.y and player.y < HEIGHT - 80:
+                player.y += COLLISION_VEL
+                pygame.time.wait(100)
+
+            player_health = self.hit_enemy(player_health)
+            enemy_health = self.hit_enemy(enemy_health)
+
+        self.draw_update()
+        return player_health, enemy_health
+
 
 class Boss(Creature):
     __IMAGE_NAME = 'enemy.png'
-    __BOSS_HIT = pygame.USEREVENT + 2
 
     def __init__(self):
         self.FIRST_POSITION_X = 700
         self.FIRST_POSITION_Y = 150
+        self.SIZE_WIDTH = 40
+        self.SIZE_HEIGHT = 80
         super().__init__(
-            'Boss', self.__IMAGE_NAME, self.FIRST_POSITION_X, self.FIRST_POSITION_Y)
+            'Boss', self.__IMAGE_NAME, self.FIRST_POSITION_X,
+            self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
+
         self.boss_bullets = []
 
-    def auto_handle_movement(self, monster, hero):
-        if hero.x > monster.x:
-            monster.x += VEL_BOSS
-        if hero.x < monster.x:
-            monster.x -= VEL_BOSS
-        if hero.y > monster.y:
-            monster.y += VEL_BOSS
-        if hero.y < monster.y:
-            monster.y -= VEL_BOSS
+    def auto_handle_movement(self, boss, player):
+
+        if boss.x > player.x and boss.x > 50:
+            if boss.x > player.x + 150:
+                boss.x -= VEL_BOSS
+            elif boss.x > player.x:
+                boss.x += VEL_BOSS
+
+        if boss.x < player.x and boss.x < WIDTH - 50:
+            if boss.x < player.x - 150:
+                boss.x += VEL_BOSS
+            elif boss.x < player.x:
+                boss.x -= VEL_BOSS
+
+        if boss.y > player.y and boss.y > 50:
+            if boss.y > player.y + 100:
+                boss.y -= VEL_BOSS
+            elif boss.y > player.y:
+                boss.y += VEL_BOSS
+
+        if boss.y < player.y and boss.y < HEIGHT - 50:
+            if boss.y > player.y - 150:
+                boss.y += VEL_BOSS
+            elif boss.y < player.y:
+                boss.y -= VEL_BOSS
 
     def shoot(self, boss):
         if len(self.boss_bullets) < MAX_BULLETS:
@@ -66,11 +105,11 @@ class Boss(Creature):
             self.boss_bullets.append(bullet)
             BULLET_FIRE_SOUND.play()
 
-    def handle_bullets(self, enemy, win):
+    def handle_bullets(self, enemy, win, hit):
         for bullet in self.boss_bullets:
             bullet.x -= BULLET_VEL
             if enemy.colliderect(bullet):
-                pygame.event.post(pygame.event.Event(BOSS_HIT))
+                pygame.event.post(pygame.event.Event(hit))
                 self.boss_bullets.remove(bullet)
             elif bullet.x > WIDTH:
                 self.boss_bullets.remove(bullet)
@@ -86,16 +125,23 @@ class Boss(Creature):
 
 
 class Monster(Creature):
+    __IMAGE_NAME = 'bat_monster.png'
 
-    def __init__(self, image_name):
-        super().__init__('Monster', image_name)
+    def __init__(self):
+        self.FIRST_POSITION_X = 900
+        self.FIRST_POSITION_Y = 0
+        self.SIZE_WIDTH = 80
+        self.SIZE_HEIGHT = 30
+        super().__init__(
+            'Monster', self.__IMAGE_NAME, self.FIRST_POSITION_X,
+            self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
-    def auto_handle_movement(self, monster, hero):
-        if hero.x > monster.x:
-            monster.x += self.VEL_MONSTER
-        if hero.x < monster.x:
-            monster.x -= self.VEL_MONSTER
-        if hero.y > monster.y:
-            monster.y += self.VEL_MONSTER
-        if hero.y < monster.y:
-            monster.y -= self.VEL_MONSTER
+    def auto_handle_movement(self, monster, player):
+        if player.x > monster.x:
+            monster.x += VEL_MONSTER
+        if player.x < monster.x:
+            monster.x -= VEL_MONSTER
+        if player.y > monster.y:
+            monster.y += VEL_MONSTER
+        if player.y < monster.y:
+            monster.y -= VEL_MONSTER

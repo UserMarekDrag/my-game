@@ -5,13 +5,15 @@ from sounds import *
 
 class Player(Creature):
     __IMAGE_NAME = 'player.png'
-    __HERO_HIT = pygame.USEREVENT + 1
 
     def __init__(self):
         self.FIRST_POSITION_X = 350
         self.FIRST_POSITION_Y = 150
+        self.SIZE_WIDTH = 40
+        self.SIZE_HEIGHT = 80
         super().__init__(
-            'Hero', self.__IMAGE_NAME, self.FIRST_POSITION_X, self.FIRST_POSITION_Y)
+            'Hero', self.__IMAGE_NAME, self.FIRST_POSITION_X, self.FIRST_POSITION_Y,
+            self.SIZE_WIDTH, self.SIZE_HEIGHT)
         self.player_bullets = []
 
     def static_handle_movement(self, keys_pressed, player):
@@ -31,11 +33,11 @@ class Player(Creature):
             self.player_bullets.append(bullet)
             BULLET_FIRE_SOUND.play()
 
-    def handle_bullets(self, enemy, win):
+    def handle_bullets(self, enemy, win, hit):
         for bullet in self.player_bullets:
             bullet.x += BULLET_VEL
             if enemy.colliderect(bullet):
-                pygame.event.post(pygame.event.Event(PLAYER_HIT))
+                pygame.event.post(pygame.event.Event(hit))
                 self.player_bullets.remove(bullet)
             elif bullet.x > WIDTH:
                 self.player_bullets.remove(bullet)
