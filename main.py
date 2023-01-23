@@ -29,8 +29,10 @@ class Game:
             if event.type == pygame.QUIT:
                 self.run = False
             if event.type == pygame.KEYDOWN:
-                self.player.shoot(event, player)
-                self.boss.shoot(boss)
+                self.player.shoot_left(event, player)
+                self.player.shoot_right(event, player)
+                self.boss.shoot_right(boss, player)
+                self.boss.shoot_left(boss, player)
             if event.type == BOSS_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
             if event.type == PLAYER_HIT_BOSS:
@@ -87,15 +89,18 @@ class Game:
             self.events(player, boss)
             self.player_health, self.enemy_health = self.player.collision_with_enemy(
                 player, boss, self.player_health, self.enemy_health)
-            if self.bat_health > 0: # no change
+            if self.bat_health > 0:
                 self.player_health, self.bat_health = self.player.collision_with_enemy(
-                player, bat, self.player_health, self.bat_health)
+                    player, bat, self.player_health, self.bat_health)
             self.health_count()
             if self.stop: break
             self.character_movement(player, boss, bat)
-            self.player.handle_bullets(boss, self.win, PLAYER_HIT_BOSS)
-            self.player.handle_bullets(bat, self.win, PLAYER_HIT_BAT)
-            self.boss.handle_bullets(player, self.win, BOSS_HIT_PLAYER)
+            self.player.handle_bullets_right(boss, self.win, PLAYER_HIT_BOSS)
+            self.player.handle_bullets_left(boss, self.win, PLAYER_HIT_BOSS)
+            self.player.handle_bullets_right(bat, self.win, PLAYER_HIT_BAT)
+            self.player.handle_bullets_left(bat, self.win, PLAYER_HIT_BAT)
+            self.boss.handle_bullets_right(player, self.win, BOSS_HIT_PLAYER)
+            self.boss.handle_bullets_left(player, self.win, BOSS_HIT_PLAYER)
             self.draw(player, boss, bat)
 
 

@@ -70,7 +70,8 @@ class Boss(Creature):
             'Boss', self.__IMAGE_NAME, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
-        self.boss_bullets = []
+        self.boss_bullets_right = []
+        self.boss_bullets_left = []
 
     def auto_handle_movement(self, boss, player):
 
@@ -98,27 +99,46 @@ class Boss(Creature):
             elif boss.y < player.y:
                 boss.y -= VEL_BOSS
 
-    def shoot(self, boss):
-        if len(self.boss_bullets) < MAX_BULLETS:
+    def shoot_right(self, boss, player):
+        if boss.x < player.x and len(self.boss_bullets_right) < MAX_BULLETS:
             bullet = pygame.Rect(
                 boss.x + boss.width, boss.y + boss.height // 2 - 2, 10, 5)
-            self.boss_bullets.append(bullet)
+            self.boss_bullets_right.append(bullet)
             BULLET_FIRE_SOUND.play()
 
-    def handle_bullets(self, enemy, win, hit):
-        for bullet in self.boss_bullets:
+    def shoot_left(self, boss, player):
+        if boss.x > player.x and len(self.boss_bullets_left) < MAX_BULLETS:
+            bullet = pygame.Rect(
+                boss.x + boss.width, boss.y + boss.height // 2 - 2, 10, 5)
+            self.boss_bullets_left.append(bullet)
+            BULLET_FIRE_SOUND.play()
+
+    def handle_bullets_right(self, enemy, win, hit):
+        for bullet in self.boss_bullets_right:
+            bullet.x += BULLET_VEL
+            if enemy.colliderect(bullet):
+                pygame.event.post(pygame.event.Event(hit))
+                self.boss_bullets_right.remove(bullet)
+            elif bullet.x > WIDTH:
+                self.boss_bullets_right.remove(bullet)
+            elif bullet.x < 0:
+                self.boss_bullets_right.remove(bullet)
+        self.draw_bullets(win, self.boss_bullets_right)
+
+    def handle_bullets_left(self, enemy, win, hit):
+        for bullet in self.boss_bullets_left:
             bullet.x -= BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
-                self.boss_bullets.remove(bullet)
+                self.boss_bullets_left.remove(bullet)
             elif bullet.x > WIDTH:
-                self.boss_bullets.remove(bullet)
+                self.boss_bullets_left.remove(bullet)
             elif bullet.x < 0:
-                self.boss_bullets.remove(bullet)
-        self.draw_bullets(win)
+                self.boss_bullets_left.remove(bullet)
+        self.draw_bullets(win, self.boss_bullets_left)
 
-    def draw_bullets(self, win):
-        for bullet in self.boss_bullets:
+    def draw_bullets(self, win, boss_bullets):
+        for bullet in boss_bullets:
             pygame.draw.rect(win, RED, bullet)
 
         pygame.display.update()
