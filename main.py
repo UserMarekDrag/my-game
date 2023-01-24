@@ -6,6 +6,7 @@ from player import *
 from monsters import *
 from animation import *
 from map import *
+from menu import *
 
 pygame.display.set_caption(GAME_NAME)
 
@@ -43,7 +44,7 @@ class Game:
                 self.bat_health = self.bat.hit_enemy(self.bat_health)
 
     def draw(self, player, boss, bat):
-        self.win.blit(BACKGROUND, (0, 0))
+        self.win.blit(BACKGROUND_GAME, (0, 0))
         self.clock.tick(FPS)
 
         self.player.health_draw(self.player_health, self.win, 5, 'Player')
@@ -81,30 +82,69 @@ class Game:
         pygame.display.update()
         pygame.time.delay(2000)
 
+    def update(self, player, boss, bat):
+        self.player_health, self.enemy_health = self.player.collision_with_enemy(
+            player, boss, self.player_health, self.enemy_health)
+        if self.bat_health > 0:
+            self.player_health, self.bat_health = self.player.collision_with_enemy(
+                player, bat, self.player_health, self.bat_health)
+        self.health_count()
+        self.character_movement(player, boss, bat)
+        self.player.handle_bullets_right(boss, self.win, PLAYER_HIT_BOSS)
+        self.player.handle_bullets_left(boss, self.win, PLAYER_HIT_BOSS)
+        self.player.handle_bullets_right(bat, self.win, PLAYER_HIT_BAT)
+        self.player.handle_bullets_left(bat, self.win, PLAYER_HIT_BAT)
+        self.boss.handle_bullets_right(player, self.win, BOSS_HIT_PLAYER)
+        self.boss.handle_bullets_left(player, self.win, BOSS_HIT_PLAYER)
+
+    def intro_screen(self):
+        intro = True
+
+        title = INITIAL_FONT.render("MAIN MENU", True, GREY)
+
+        play_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 200, "Start Game")
+        exit_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 400, "Exit Game")
+
+        while intro:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    intro = True
+                    self.run = False
+
+            mouse_position = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if play_button.is_pressed(mouse_position, mouse_pressed):
+                intro = False
+            elif exit_button.is_pressed(mouse_position, mouse_pressed):
+                self.run = False
+                pygame.quit()
+                sys.exit()
+
+            self.win.blit(BACKGROUND_MENU, (0, 0))
+            self.win.blit(title, (340, 100))
+            self.win.blit(play_button.image, play_button.rect)
+            self.win.blit(exit_button.image, exit_button.rect)
+            self.clock.tick(FPS)
+            pygame.display.update()
+
     def main(self):
         player = self.player.rect
         boss = self.boss.rect
         bat = self.bat.rect
         while self.run:
             self.events(player, boss)
-            self.player_health, self.enemy_health = self.player.collision_with_enemy(
-                player, boss, self.player_health, self.enemy_health)
-            if self.bat_health > 0:
-                self.player_health, self.bat_health = self.player.collision_with_enemy(
-                    player, bat, self.player_health, self.bat_health)
-            self.health_count()
-            if self.stop: break
-            self.character_movement(player, boss, bat)
-            self.player.handle_bullets_right(boss, self.win, PLAYER_HIT_BOSS)
-            self.player.handle_bullets_left(boss, self.win, PLAYER_HIT_BOSS)
-            self.player.handle_bullets_right(bat, self.win, PLAYER_HIT_BAT)
-            self.player.handle_bullets_left(bat, self.win, PLAYER_HIT_BAT)
-            self.boss.handle_bullets_right(player, self.win, BOSS_HIT_PLAYER)
-            self.boss.handle_bullets_left(player, self.win, BOSS_HIT_PLAYER)
+
+            if not self.stop:
+                self.update(player, boss, bat)
+            else:
+                break
+
             self.draw(player, boss, bat)
 
 
 game = Game()
+game.intro_screen()
 if __name__ == '__main__':
     game.main()
 
