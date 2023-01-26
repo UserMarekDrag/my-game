@@ -59,15 +59,14 @@ class Creature:
 
 
 class Boss(Creature):
-    __IMAGE_NAME = 'enemy.png'
 
     def __init__(self):
         self.FIRST_POSITION_X = 700
         self.FIRST_POSITION_Y = 150
-        self.SIZE_WIDTH = 40
-        self.SIZE_HEIGHT = 80
+        self.SIZE_WIDTH = 150
+        self.SIZE_HEIGHT = 190
         super().__init__(
-            'Boss', self.__IMAGE_NAME, self.FIRST_POSITION_X,
+            'Boss', BOSS_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
         self.boss_bullets_right = []
@@ -145,15 +144,14 @@ class Boss(Creature):
 
 
 class Monster(Creature):
-    __IMAGE_NAME = 'bat_monster.png'
 
     def __init__(self):
         self.FIRST_POSITION_X = 900
         self.FIRST_POSITION_Y = 0
         self.SIZE_WIDTH = 80
-        self.SIZE_HEIGHT = 30
+        self.SIZE_HEIGHT = 60
         super().__init__(
-            'Monster', self.__IMAGE_NAME, self.FIRST_POSITION_X,
+            'Monster', MONSTRER_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
     def auto_handle_movement(self, monster, player):

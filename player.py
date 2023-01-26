@@ -5,15 +5,14 @@ from sounds import *
 
 
 class Player(Creature):
-    __IMAGE_NAME = 'player.png'
 
-    def __init__(self):
+    def __init__(self, image_name):
         self.FIRST_POSITION_X = 350
         self.FIRST_POSITION_Y = 150
         self.SIZE_WIDTH = 40
         self.SIZE_HEIGHT = 80
         super().__init__(
-            'Hero', self.__IMAGE_NAME, self.FIRST_POSITION_X, self.FIRST_POSITION_Y,
+            'Hero', image_name, self.FIRST_POSITION_X, self.FIRST_POSITION_Y,
             self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
         self.player_bullets_right = []
