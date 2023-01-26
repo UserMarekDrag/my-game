@@ -78,10 +78,10 @@ class Game:
     def health_count(self):
         winner_text = ""
         if self.enemy_health <= 0:
-            winner_text = 'Player Wins!'
+            winner_text = 'You Win!'
 
         if self.player_health <= 0:
-            winner_text = 'Enemy Wins!'
+            winner_text = 'You died'
 
         if winner_text != "":
             self.draw_winner(winner_text)
@@ -90,9 +90,10 @@ class Game:
     def draw_winner(self, winner_text):
         draw_text = WINNER_FONT.render(winner_text, True, WHITE)
         self.win.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2,
-                                  HEIGHT / 2 - draw_text.get_height() / 2))
+                                  HEIGHT / 2 - draw_text.get_height()))
         pygame.display.update()
-        pygame.time.delay(2000)
+        pygame.time.wait(2000)
+        self.menu_end(draw_text)
 
     def update(self, player, boss, bat):
         self.player_health, self.enemy_health = self.player.collision_with_enemy(
@@ -149,7 +150,7 @@ class Game:
             pygame.display.update()
 
     def menu_choice_char(self):
-        intro_char = True
+        menu_char = True
 
         male_player = Player(MALE_CHARACTER)
         female_player = Player(FEMALE_CHARACTER)
@@ -157,10 +158,10 @@ class Game:
         char_male_button = Button(190, 400, "MALE")
         char_female_button = Button(470, 400, "FEMALE")
 
-        while intro_char:
+        while menu_char:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    intro_char = False
+                    menu_char = False
                     self.run = False
 
             mouse_position = pygame.mouse.get_pos()
@@ -182,6 +183,49 @@ class Game:
             self.win.blit(char_female_button.image, char_female_button.rect)
             self.clock.tick(FPS)
             pygame.display.update()
+
+    def menu_end(self, draw_text):
+        menu_end = True
+
+        play_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 330, "Start Again")
+        exit_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 400, "Exit Game")
+
+        while menu_end:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    menu_end = False
+                    self.run = False
+
+            mouse_position = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if play_button.is_pressed(mouse_position, mouse_pressed):
+                menu_end = False
+                self.new_game()
+
+            elif exit_button.is_pressed(mouse_position, mouse_pressed):
+                self.run = False
+                pygame.quit()
+                sys.exit()
+
+            self.win.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2,
+                                      HEIGHT / 2 - draw_text.get_height()))
+            self.win.blit(play_button.image, play_button.rect)
+            self.win.blit(exit_button.image, exit_button.rect)
+            self.clock.tick(FPS)
+            pygame.display.update()
+
+    def new_game(self):
+        self.run = True
+        self.player = Player(self.character_dictionary[self.character_choice])
+        self.boss = Boss()
+        self.bat = Monster()
+        self.player_health = PLAYER_HEALTH
+        self.enemy_health = ENEMY_HEALTH
+        self.bat_health = BAT_HEALTH
+        self.stop = False
+
+        self.main()
 
     def main(self):
         player = self.player.rect
