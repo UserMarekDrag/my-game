@@ -11,12 +11,12 @@ FEMALE_CHARACTER = "female_player.PNG"
 
 # enemy image
 BOSS_IMAGE = 'boss.png'
-MONSTRER_IMAGE = 'bat.png'
+MONSTER_IMAGE = 'bat.png'
 
 # moving speed
 VEL_PLAYER = 5
-VEL_MONSTER = 3
-VEL_BOSS = 4
+VEL_MONSTER = 4
+VEL_BOSS = 3
 
 # health amount
 PLAYER_HEALTH = 5
@@ -26,8 +26,12 @@ BAT_HEALTH = 1
 # constant for creature
 PLAYER_HIT_BOSS = pygame.USEREVENT + 1
 PLAYER_HIT_BAT = pygame.USEREVENT + 4
+PLAYER_HIT_BAT_1 = pygame.USEREVENT + 7
+PLAYER_HIT_BAT_2 = pygame.USEREVENT + 8
 BOSS_HIT_PLAYER = pygame.USEREVENT + 2
 BAT_HIT_PLAYER = pygame.USEREVENT + 3
+BAT_1_HIT_PLAYER = pygame.USEREVENT + 5
+BAT_2_HIT_PLAYER = pygame.USEREVENT + 6
 
 # push
 COLLISION_VEL = 20

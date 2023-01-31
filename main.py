@@ -16,6 +16,7 @@ class Game:
         self.win = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.run = True
+        self.stage = 0
         self.character_choice = "male"
         self.character_dictionary = {
             "male": MALE_CHARACTER,
@@ -23,11 +24,31 @@ class Game:
         }
         self.player = Player(self.character_dictionary[self.character_choice])
         self.boss = Boss()
-        self.bat = Monster()
+
         self.player_health = PLAYER_HEALTH
         self.enemy_health = ENEMY_HEALTH
         self.bat_health = BAT_HEALTH
+
         self.stop = False
+
+        self.boss_position = self.boss.rect
+        self.player_position = self.player.rect
+
+        self.bat = Monster(0, 0)
+        self.bat_1 = Monster(900, 150)
+        self.bat_2 = Monster(900, 500)
+
+        self.bat_health = BAT_HEALTH
+        self.bat_1_health = BAT_HEALTH
+        self.bat_2_health = BAT_HEALTH
+
+        self.bat_position = self.bat.rect
+        self.bat_1_position = self.bat.rect
+        self.bat_2_position = self.bat.rect
+
+        self.bat_is_alive = False
+        self.bat_1_is_alive = False
+        self.bat_2_is_alive = False
 
     def character_update(self):
         self.character_dictionary = {
@@ -36,44 +57,92 @@ class Game:
         }
         self.player = Player(self.character_dictionary[self.character_choice])
 
-    def events(self, player, boss):
+    def events(self):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.run = False
             if event.type == pygame.KEYDOWN:
-                self.player.shoot_left(event, player)
-                self.player.shoot_right(event, player)
-                self.boss.shoot_right(boss, player)
-                self.boss.shoot_left(boss, player)
+                self.player.shoot_left(event, self.player_position)
+                self.player.shoot_right(event, self.player_position)
+
+            if self.stage == 5:
+                self.boss.shoot_right(self.boss_position, self.player_position)
+                self.boss.shoot_left(self.boss_position, self.player_position)
+
             if event.type == BOSS_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
             if event.type == PLAYER_HIT_BOSS:
                 self.enemy_health = self.boss.hit_enemy(self.enemy_health)
             if event.type == BAT_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
+            if event.type == BAT_1_HIT_PLAYER:
+                self.player_health = self.player.hit_enemy(self.player_health)
+            if event.type == BAT_2_HIT_PLAYER:
+                self.player_health = self.player.hit_enemy(self.player_health)
             if event.type == PLAYER_HIT_BAT:
                 self.bat_health = self.bat.hit_enemy(self.bat_health)
+            if event.type == PLAYER_HIT_BAT_1:
+                self.bat_1_health = self.bat_1.hit_enemy(self.bat_1_health)
+            if event.type == PLAYER_HIT_BAT_2:
+                self.bat_2_health = self.bat_2.hit_enemy(self.bat_2_health)
 
-    def draw(self, player, boss, bat):
+    def draw(self, *bats):
         self.win.blit(BACKGROUND_GAME, (0, 0))
         self.clock.tick(FPS)
 
         self.player.health_draw(self.player_health, self.win, 5, 'Player')
         self.boss.health_draw(self.enemy_health, self.win, 30, 'Boss')
 
-        self.win.blit(self.player.CREATURE, (player.x, player.y))
-        self.win.blit(self.boss.CREATURE, (boss.x, boss.y))
-        if self.bat_health > 0:
-            self.win.blit(self.bat.CREATURE, (bat.x, bat.y))
+        self.win.blit(self.player.CREATURE, (self.player_position.x, self.player_position.y))
+
+        if self.stage == 5:
+            self.win.blit(self.boss.CREATURE, (self.boss_position.x, self.boss_position.y))
+
+        print(self.stage)
+
+        for bat in bats:
+            if self.bat_health > 0 and self.stage > 0 and bat == self.bat_position:
+                self.win.blit(self.bat.CREATURE, (bat.x, bat.y))
+            elif self.bat_1_health > 0 and self.stage > 1 and bat == self.bat_1_position:
+                self.win.blit(self.bat_1.CREATURE, (bat.x, bat.y))
+            elif self.bat_2_health > 0 and self.stage > 2 and bat == self.bat_2_position:
+                self.win.blit(self.bat_2.CREATURE, (bat.x, bat.y))
+            else:
+                pass
 
         pygame.display.update()
 
-    def character_movement(self, player, boss, bat):
+    def character_movement(self, bat, bat_1, bat_2):
         keys_pressed = pygame.key.get_pressed()
-        self.player.static_handle_movement(keys_pressed, player)
-        self.boss.auto_handle_movement(boss, player)
-        self.bat.auto_handle_movement(bat, player)
+        self.player.static_handle_movement(keys_pressed, self.player_position)
+
+        if self.stage == 5:
+            self.boss.auto_handle_movement(self.boss_position, self.player_position)
+
+        if self.bat_health > 0:
+            self.bat.auto_handle_movement(bat, self.player_position)
+        elif self.bat_health == 0 and self.stage == 5:
+            bat.x = 950
+            bat.y = 0
+        else:
+            pass
+
+        if self.bat_1_health > 0:
+            self.bat.auto_handle_movement(bat_1, self.player_position)
+        elif self.bat_1_health == 0 and self.stage == 5:
+            bat_1.x = 950
+            bat_1.y = 0
+        else:
+            pass
+
+        if self.bat_2_health > 0:
+            self.bat.auto_handle_movement(bat_2, self.player_position)
+        elif self.bat_2_health == 0 and self.stage == 5:
+            bat_2.x = 950
+            bat_2.y = 0
+        else:
+            pass
 
     def health_count(self):
         winner_text = ""
@@ -95,20 +164,30 @@ class Game:
         pygame.time.wait(2000)
         self.menu_end(draw_text)
 
-    def update(self, player, boss, bat):
+    def update(self, bat, bat_1, bat_2):
         self.player_health, self.enemy_health = self.player.collision_with_enemy(
-            player, boss, self.player_health, self.enemy_health)
+            self.player_position, self.boss_position, self.player_health, self.enemy_health)
         if self.bat_health > 0:
             self.player_health, self.bat_health = self.player.collision_with_enemy(
-                player, bat, self.player_health, self.bat_health)
+                self.player_position, bat, self.player_health, self.bat_health)
+        if self.bat_1_health > 0:
+            self.player_health, self.bat_1_health = self.player.collision_with_enemy(
+                self.player_position, bat_1, self.player_health, self.bat_1_health)
+        if self.bat_2_health > 0:
+            self.player_health, self.bat_2_health = self.player.collision_with_enemy(
+                self.player_position, bat_2, self.player_health, self.bat_2_health)
         self.health_count()
-        self.character_movement(player, boss, bat)
-        self.player.handle_bullets_right(boss, self.win, PLAYER_HIT_BOSS)
-        self.player.handle_bullets_left(boss, self.win, PLAYER_HIT_BOSS)
+        self.character_movement(bat, bat_1, bat_2)
+        self.player.handle_bullets_right(self.boss_position, self.win, PLAYER_HIT_BOSS)
+        self.player.handle_bullets_left(self.boss_position, self.win, PLAYER_HIT_BOSS)
         self.player.handle_bullets_right(bat, self.win, PLAYER_HIT_BAT)
         self.player.handle_bullets_left(bat, self.win, PLAYER_HIT_BAT)
-        self.boss.handle_bullets_right(player, self.win, BOSS_HIT_PLAYER)
-        self.boss.handle_bullets_left(player, self.win, BOSS_HIT_PLAYER)
+        self.player.handle_bullets_right(bat_1, self.win, PLAYER_HIT_BAT_1)
+        self.player.handle_bullets_left(bat_1, self.win, PLAYER_HIT_BAT_1)
+        self.player.handle_bullets_right(bat_2, self.win, PLAYER_HIT_BAT_2)
+        self.player.handle_bullets_left(bat_2, self.win, PLAYER_HIT_BAT_2)
+        self.boss.handle_bullets_right(self.player_position, self.win, BOSS_HIT_PLAYER)
+        self.boss.handle_bullets_left(self.player_position, self.win, BOSS_HIT_PLAYER)
 
     def menu_screen(self):
         main_menu = True
@@ -218,28 +297,114 @@ class Game:
     def new_game(self):
         self.run = True
         self.player = Player(self.character_dictionary[self.character_choice])
+        self.player_position.x = 350
+        self.player_position.y = 150
+
         self.boss = Boss()
-        self.bat = Monster()
+        self.boss_position.x = 900
+        self.boss_position.y = 600
+
         self.player_health = PLAYER_HEALTH
         self.enemy_health = ENEMY_HEALTH
-        self.bat_health = BAT_HEALTH
+
         self.stop = False
+        self.stage = 0
+
+        self.bat = Monster(0, 0)
+        self.bat_1 = Monster(900, 150)
+        self.bat_2 = Monster(900, 500)
+
+        self.bat_health = BAT_HEALTH
+        self.bat_1_health = BAT_HEALTH
+        self.bat_2_health = BAT_HEALTH
+
+        self.bat_position = self.bat.rect
+        self.bat_1_position = self.bat.rect
+        self.bat_2_position = self.bat.rect
+
+        self.bat_is_alive = False
+        self.bat_1_is_alive = False
+        self.bat_2_is_alive = False
 
         self.main()
 
-    def main(self):
-        player = self.player.rect
-        boss = self.boss.rect
-        bat = self.bat.rect
-        while self.run:
-            self.events(player, boss)
+    def next_stage_values(self):
+        if self.stage < 5:
 
+            self.bat_is_alive = False
+            self.bat_1_is_alive = False
+            self.bat_2_is_alive = False
+
+            self.bat = Monster(0, 0)
+            self.bat_1 = Monster(900, 150)
+            self.bat_2 = Monster(900, 500)
+
+            self.bat_position = self.bat.rect
+            self.bat_1_position = self.bat_1.rect
+            self.bat_2_position = self.bat_2.rect
+
+            self.bat_health = BAT_HEALTH
+            self.bat_1_health = BAT_HEALTH
+            self.bat_2_health = BAT_HEALTH
+
+            if self.stage == 5:
+                pass
+        else:
+            pass
+
+    def next_stage(self):
+
+        if self.bat_health < 1:
+            self.bat_is_alive = True
+
+        if self.bat_1_health < 1:
+            self.bat_1_is_alive = True
+
+        if self.bat_2_health < 1:
+            self.bat_2_is_alive = True
+
+        stage_1 = [self.bat_is_alive]
+        stage_2 = [self.bat_is_alive, self.bat_1_is_alive]
+        stage_3 = [self.bat_is_alive, self.bat_1_is_alive, self.bat_2_is_alive]
+
+        print('Stage 1:', stage_1)
+        print('Stage 2:', stage_2)
+        print('Stage 3:', stage_3)
+
+        if self.stage == 0:
+            print('warunek 1 spełniony')
+            self.next_stage_values()
+            return self.stage + 1
+
+        elif all(stage_1) is True and self.stage == 1:
+            print('warunek 1 spełniony')
+            self.next_stage_values()
+            return self.stage + 1
+        elif all(stage_2) is True and self.stage == 2:
+            print('warunek 2 spełniony')
+            self.next_stage_values()
+            return self.stage + 1
+        elif all(stage_3) is True and self.stage == 3:
+            print('warunek 3 spełniony')
+            self.next_stage_values()
+            return self.stage + 1
+        elif all(stage_3) is True and self.stage == 4:
+            print('warunek 3 spełniony')
+            self.next_stage_values()
+            return self.stage + 1
+        else:
+            return self.stage
+
+    def main(self):
+
+        while self.run:
+            self.stage = self.next_stage()
+            self.events()
             if not self.stop:
-                self.update(player, boss, bat)
+                self.update(self.bat_position, self.bat_1_position, self.bat_2_position)
             else:
                 break
-
-            self.draw(player, boss, bat)
+            self.draw(self.bat_position, self.bat_1_position, self.bat_2_position)
 
 
 game = Game()

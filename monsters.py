@@ -61,8 +61,8 @@ class Creature:
 class Boss(Creature):
 
     def __init__(self):
-        self.FIRST_POSITION_X = 700
-        self.FIRST_POSITION_Y = 150
+        self.FIRST_POSITION_X = 900
+        self.FIRST_POSITION_Y = 600
         self.SIZE_WIDTH = 150
         self.SIZE_HEIGHT = 190
         super().__init__(
@@ -145,13 +145,13 @@ class Boss(Creature):
 
 class Monster(Creature):
 
-    def __init__(self):
-        self.FIRST_POSITION_X = 900
-        self.FIRST_POSITION_Y = 0
+    def __init__(self, first_position_x, first_position_y):
+        self.FIRST_POSITION_X = first_position_x
+        self.FIRST_POSITION_Y = first_position_y
         self.SIZE_WIDTH = 80
         self.SIZE_HEIGHT = 60
         super().__init__(
-            'Monster', MONSTRER_IMAGE, self.FIRST_POSITION_X,
+            'Monster', MONSTER_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
     def auto_handle_movement(self, monster, player):
