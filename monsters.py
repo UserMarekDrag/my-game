@@ -62,59 +62,115 @@ class Boss(Creature):
 
     def __init__(self):
         self.FIRST_POSITION_X = 900
-        self.FIRST_POSITION_Y = 600
-        self.SIZE_WIDTH = 150
-        self.SIZE_HEIGHT = 190
+        self.FIRST_POSITION_Y = 150
+        self.SIZE_WIDTH = 60
+        self.SIZE_HEIGHT = 100
         super().__init__(
             'Boss', BOSS_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
         self.boss_bullets_right = []
         self.boss_bullets_left = []
+        self.position = 'center'
+        self.time_break = True
+        self.time_step = 50
 
-    def auto_handle_movement(self, boss, player):
+    def waiting(self):
+        if self.time_step == 0:
+            self.time_break = True
+        else:
+            self.time_step -= 1
 
-        if boss.x > player.x and boss.x > 50:
-            if boss.x > player.x + 150:
+    def auto_handle_movement(self, boss):
+
+        # center
+        if self.position == 'center' and self.time_break:
+            if boss.x > 400:
                 boss.x -= VEL_BOSS
-            elif boss.x > player.x:
-                boss.x += VEL_BOSS
+            if boss.y > 150:
+                boss.y -= VEL_BOSS
+            if boss.x == 400 and boss.y == 150:
+                self.position = 'left_up'
+                self.time_break = False
+                self.time_step = 50
 
-        if boss.x < player.x and boss.x < WIDTH - 50:
-            if boss.x < player.x - 150:
-                boss.x += VEL_BOSS
-            elif boss.x < player.x:
+        # wait in center
+        elif self.position == 'left_up' and not self.time_break:
+            self.waiting()
+
+        #  go to left up
+        elif self.position == 'left_up' and self.time_break:
+            if boss.x > 100:
                 boss.x -= VEL_BOSS
-
-        if boss.y > player.y and boss.y > 50:
-            if boss.y > player.y + 100:
+            if boss.y > 80:
                 boss.y -= VEL_BOSS
-            elif boss.y > player.y:
-                boss.y += VEL_BOSS
+            if boss.x == 100 and boss.y == 80:
+                self.position = 'right_up'
+                self.time_break = False
+                self.time_step = 50
 
-        if boss.y < player.y and boss.y < HEIGHT - 50:
-            if boss.y > player.y - 150:
+        # wait in left up
+        elif self.position == 'right_up' and not self.time_break:
+            self.waiting()
+
+        #  go to right up
+        elif self.position == 'right_up' and self.time_break:
+            if boss.x < 600:
+                boss.x += VEL_BOSS
+            if boss.x == 600 and boss.y == 80:
+                self.position = 'left_down'
+                self.time_break = False
+                self.time_step = 50
+
+        # wait in right up
+        elif self.position == 'left_down' and not self.time_break:
+            self.waiting()
+
+        #  go to left_down
+        elif self.position == 'left_down' and self.time_break:
+            if boss.x > 100:
+                boss.x -= VEL_BOSS
+            if boss.y < 250:
                 boss.y += VEL_BOSS
-            elif boss.y < player.y:
-                boss.y -= VEL_BOSS
+            if boss.x == 100 and boss.y == 250:
+                self.position = 'right_down'
+                self.time_break = False
+                self.time_step = 50
+
+        # wait in left_down
+        elif self.position == 'right_down' and not self.time_break:
+            self.waiting()
+
+        #  go to right_down
+        elif self.position == 'right_down' and self.time_break:
+            if boss.x < 600:
+                boss.x += VEL_BOSS
+            if boss.x == 600 and boss.y == 250:
+                self.position = 'center'
+                self.time_break = False
+                self.time_step = 50
+
+        # wait in right_down
+        elif self.position == 'center' and not self.time_break:
+            self.waiting()
 
     def shoot_right(self, boss, player):
-        if boss.x < player.x and len(self.boss_bullets_right) < MAX_BULLETS:
+        if boss.x < player.x and len(self.boss_bullets_right) < BOSS_MAX_BULLETS:
             bullet = pygame.Rect(
-                boss.x + boss.width, boss.y + boss.height // 2 - 2, 10, 5)
+                boss.x - 10, boss.y + 50, 30, 10)
             self.boss_bullets_right.append(bullet)
             BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, boss, player):
-        if boss.x > player.x and len(self.boss_bullets_left) < MAX_BULLETS:
+        if boss.x > player.x and len(self.boss_bullets_left) < BOSS_MAX_BULLETS:
             bullet = pygame.Rect(
-                boss.x + boss.width, boss.y + boss.height // 2 - 2, 10, 5)
+                boss.x - 10, boss.y + 50, 30, 10)
             self.boss_bullets_left.append(bullet)
             BULLET_FIRE_SOUND.play()
 
     def handle_bullets_right(self, enemy, win, hit):
         for bullet in self.boss_bullets_right:
-            bullet.x += BULLET_VEL
+            bullet.x += BOSS_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.boss_bullets_right.remove(bullet)
@@ -126,7 +182,7 @@ class Boss(Creature):
 
     def handle_bullets_left(self, enemy, win, hit):
         for bullet in self.boss_bullets_left:
-            bullet.x -= BULLET_VEL
+            bullet.x -= BOSS_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.boss_bullets_left.remove(bullet)

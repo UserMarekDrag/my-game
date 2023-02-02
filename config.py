@@ -16,11 +16,11 @@ MONSTER_IMAGE = 'bat.png'
 # moving speed
 VEL_PLAYER = 5
 VEL_MONSTER = 4
-VEL_BOSS = 3
+VEL_BOSS = 5
 
 # health amount
-PLAYER_HEALTH = 5
-ENEMY_HEALTH = 5
+PLAYER_HEALTH = 3
+BOSS_HEALTH = 10
 BAT_HEALTH = 1
 
 # constant for creature
@@ -37,8 +37,10 @@ BAT_2_HIT_PLAYER = pygame.USEREVENT + 6
 COLLISION_VEL = 20
 
 # shot speed
-BULLET_VEL = 7
+BOSS_BULLET_VEL = 15
+PLAYER_BULLET_VEL = 7
 MAX_BULLETS = 3
+BOSS_MAX_BULLETS = 10
 
 # font
 pygame.font.init()

@@ -50,7 +50,7 @@ class Player(Creature):
     def handle_bullets_right(self, enemy, win, hit):
 
         for bullet in self.player_bullets_right:
-            bullet.x += BULLET_VEL
+            bullet.x += PLAYER_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.player_bullets_right.remove(bullet)
@@ -63,7 +63,7 @@ class Player(Creature):
     def handle_bullets_left(self, enemy, win, hit):
 
         for bullet in self.player_bullets_left:
-            bullet.x -= BULLET_VEL
+            bullet.x -= PLAYER_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.player_bullets_left.remove(bullet)

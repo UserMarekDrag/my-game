@@ -26,7 +26,7 @@ class Game:
         self.boss = Boss()
 
         self.player_health = PLAYER_HEALTH
-        self.enemy_health = ENEMY_HEALTH
+        self.boss_health = BOSS_HEALTH
         self.bat_health = BAT_HEALTH
 
         self.stop = False
@@ -73,7 +73,7 @@ class Game:
             if event.type == BOSS_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
             if event.type == PLAYER_HIT_BOSS:
-                self.enemy_health = self.boss.hit_enemy(self.enemy_health)
+                self.boss_health = self.boss.hit_enemy(self.boss_health)
             if event.type == BAT_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
             if event.type == BAT_1_HIT_PLAYER:
@@ -92,14 +92,12 @@ class Game:
         self.clock.tick(FPS)
 
         self.player.health_draw(self.player_health, self.win, 5, 'Player')
-        self.boss.health_draw(self.enemy_health, self.win, 30, 'Boss')
+        self.boss.health_draw(self.boss_health, self.win, 30, 'Boss')
 
         self.win.blit(self.player.CREATURE, (self.player_position.x, self.player_position.y))
 
         if self.stage == 5:
             self.win.blit(self.boss.CREATURE, (self.boss_position.x, self.boss_position.y))
-
-        print(self.stage)
 
         for bat in bats:
             if self.bat_health > 0 and self.stage > 0 and bat == self.bat_position:
@@ -118,7 +116,7 @@ class Game:
         self.player.static_handle_movement(keys_pressed, self.player_position)
 
         if self.stage == 5:
-            self.boss.auto_handle_movement(self.boss_position, self.player_position)
+            self.boss.auto_handle_movement(self.boss_position)
 
         if self.bat_health > 0:
             self.bat.auto_handle_movement(bat, self.player_position)
@@ -146,7 +144,7 @@ class Game:
 
     def health_count(self):
         winner_text = ""
-        if self.enemy_health <= 0:
+        if self.boss_health <= 0:
             winner_text = 'You Win!'
 
         if self.player_health <= 0:
@@ -165,8 +163,8 @@ class Game:
         self.menu_end(draw_text)
 
     def update(self, bat, bat_1, bat_2):
-        self.player_health, self.enemy_health = self.player.collision_with_enemy(
-            self.player_position, self.boss_position, self.player_health, self.enemy_health)
+        self.player_health, self.boss_health = self.player.collision_with_enemy(
+            self.player_position, self.boss_position, self.player_health, self.boss_health)
         if self.bat_health > 0:
             self.player_health, self.bat_health = self.player.collision_with_enemy(
                 self.player_position, bat, self.player_health, self.bat_health)
@@ -302,10 +300,10 @@ class Game:
 
         self.boss = Boss()
         self.boss_position.x = 900
-        self.boss_position.y = 600
+        self.boss_position.y = 150
 
         self.player_health = PLAYER_HEALTH
-        self.enemy_health = ENEMY_HEALTH
+        self.boss_health = BOSS_HEALTH
 
         self.stop = False
         self.stage = 0
@@ -367,29 +365,20 @@ class Game:
         stage_2 = [self.bat_is_alive, self.bat_1_is_alive]
         stage_3 = [self.bat_is_alive, self.bat_1_is_alive, self.bat_2_is_alive]
 
-        print('Stage 1:', stage_1)
-        print('Stage 2:', stage_2)
-        print('Stage 3:', stage_3)
-
         if self.stage == 0:
-            print('warunek 1 spełniony')
             self.next_stage_values()
             return self.stage + 1
 
         elif all(stage_1) is True and self.stage == 1:
-            print('warunek 1 spełniony')
             self.next_stage_values()
             return self.stage + 1
         elif all(stage_2) is True and self.stage == 2:
-            print('warunek 2 spełniony')
             self.next_stage_values()
             return self.stage + 1
         elif all(stage_3) is True and self.stage == 3:
-            print('warunek 3 spełniony')
             self.next_stage_values()
             return self.stage + 1
         elif all(stage_3) is True and self.stage == 4:
-            print('warunek 3 spełniony')
             self.next_stage_values()
             return self.stage + 1
         else:
