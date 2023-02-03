@@ -19,6 +19,7 @@ class Player(Creature):
         self.player_bullets_left = []
 
     def static_handle_movement(self, keys_pressed, player):
+
         if keys_pressed[pygame.K_LEFT] and player.x - VEL_PLAYER > 0:  # LEFT
             player.x -= VEL_PLAYER
         if keys_pressed[pygame.K_RIGHT] and player.x + VEL_PLAYER + player.width < WIDTH:  # RIGHT
@@ -29,11 +30,13 @@ class Player(Creature):
             player.y += VEL_PLAYER
 
     def draw_bullets(self, win, player_bullets):
+
         for bullet in player_bullets:
             pygame.draw.rect(win, YELLOW, bullet)
         self.draw_update()
 
     def shoot_right(self, event, player):
+
         if event.key == pygame.K_x and len(self.player_bullets_right) < MAX_BULLETS:
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
@@ -41,6 +44,7 @@ class Player(Creature):
             BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, event, player):
+
         if event.key == pygame.K_z and len(self.player_bullets_left) < MAX_BULLETS:
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)

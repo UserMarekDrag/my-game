@@ -27,7 +27,6 @@ class Game:
 
         self.player_health = PLAYER_HEALTH
         self.boss_health = BOSS_HEALTH
-        self.bat_health = BAT_HEALTH
 
         self.stop = False
 
@@ -35,20 +34,32 @@ class Game:
         self.player_position = self.player.rect
 
         self.bat = Monster(0, 0)
-        self.bat_1 = Monster(900, 150)
-        self.bat_2 = Monster(900, 500)
+        self.bat_1 = Monster(900, 0)
+        self.bat_2 = Monster(900, 550)
 
         self.bat_health = BAT_HEALTH
         self.bat_1_health = BAT_HEALTH
         self.bat_2_health = BAT_HEALTH
 
         self.bat_position = self.bat.rect
-        self.bat_1_position = self.bat.rect
-        self.bat_2_position = self.bat.rect
+        self.bat_1_position = self.bat_1.rect
+        self.bat_2_position = self.bat_2.rect
 
         self.bat_is_alive = False
         self.bat_1_is_alive = False
         self.bat_2_is_alive = False
+
+        self.mage_1 = Mage(0, 250)
+        self.mage_2 = Mage(800, 50)
+
+        self.mage_1_health = MAGE_HEALTH
+        self.mage_2_health = MAGE_HEALTH
+
+        self.mage_1_position = self.mage_1.rect
+        self.mage_2_position = self.mage_2.rect
+
+        self.mage_1_is_alive = False
+        self.mage_2_is_alive = False
 
     def character_update(self):
         self.character_dictionary = {
@@ -70,22 +81,46 @@ class Game:
                 self.boss.shoot_right(self.boss_position, self.player_position)
                 self.boss.shoot_left(self.boss_position, self.player_position)
 
+            if self.stage > 2:
+                self.mage_1.shoot_right(self.mage_1_position, self.player_position)
+            if self.stage > 3:
+                self.mage_2.shoot_left(self.mage_2_position, self.player_position)
+
             if event.type == BOSS_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
+
             if event.type == PLAYER_HIT_BOSS:
                 self.boss_health = self.boss.hit_enemy(self.boss_health)
+
             if event.type == BAT_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
+
             if event.type == BAT_1_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
+
             if event.type == BAT_2_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
+
             if event.type == PLAYER_HIT_BAT:
                 self.bat_health = self.bat.hit_enemy(self.bat_health)
+
             if event.type == PLAYER_HIT_BAT_1:
                 self.bat_1_health = self.bat_1.hit_enemy(self.bat_1_health)
+
             if event.type == PLAYER_HIT_BAT_2:
                 self.bat_2_health = self.bat_2.hit_enemy(self.bat_2_health)
+
+            if event.type == MAGE_1_HIT_PLAYER:
+                self.player_health = self.player.hit_enemy(self.player_health)
+
+            if event.type == PLAYER_HIT_MAGE_1:
+                self.mage_1_health = self.mage_1.hit_enemy(self.mage_1_health)
+
+            if event.type == MAGE_2_HIT_PLAYER:
+                self.player_health = self.player.hit_enemy(self.player_health)
+
+            if event.type == PLAYER_HIT_MAGE_2:
+                self.mage_2_health = self.mage_2.hit_enemy(self.mage_2_health)
 
     def draw(self, *bats):
         self.win.blit(BACKGROUND_GAME, (0, 0))
@@ -98,6 +133,12 @@ class Game:
 
         if self.stage == 5:
             self.win.blit(self.boss.CREATURE, (self.boss_position.x, self.boss_position.y))
+
+        if self.mage_1_health > 0 and self.stage > 2:
+            self.win.blit(self.mage_1.CREATURE, (self.mage_1_position.x, self.mage_1_position.y))
+
+        if self.mage_2_health > 0 and self.stage > 3:
+            self.win.blit(self.mage_2.CREATURE, (self.mage_2_position.x, self.mage_2_position.y))
 
         for bat in bats:
             if self.bat_health > 0 and self.stage > 0 and bat == self.bat_position:
@@ -142,6 +183,14 @@ class Game:
         else:
             pass
 
+        if self.mage_1_health < 1:
+            self.mage_1_position.x = 950
+            self.mage_1_position.y = 0
+
+        if self.mage_2_health < 1:
+            self.mage_2_position.x = 950
+            self.mage_2_position.y = 0
+
     def health_count(self):
         winner_text = ""
         if self.boss_health <= 0:
@@ -163,8 +212,14 @@ class Game:
         self.menu_end(draw_text)
 
     def update(self, bat, bat_1, bat_2):
+
         self.player_health, self.boss_health = self.player.collision_with_enemy(
             self.player_position, self.boss_position, self.player_health, self.boss_health)
+        self.player_health, self.mage_1_health = self.player.collision_with_enemy(
+            self.player_position, self.mage_1_position, self.player_health, self.mage_1_health)
+        self.player_health, self.mage_2_health = self.player.collision_with_enemy(
+            self.player_position, self.mage_2_position, self.player_health, self.mage_2_health)
+
         if self.bat_health > 0:
             self.player_health, self.bat_health = self.player.collision_with_enemy(
                 self.player_position, bat, self.player_health, self.bat_health)
@@ -174,18 +229,33 @@ class Game:
         if self.bat_2_health > 0:
             self.player_health, self.bat_2_health = self.player.collision_with_enemy(
                 self.player_position, bat_2, self.player_health, self.bat_2_health)
+
         self.health_count()
         self.character_movement(bat, bat_1, bat_2)
+
         self.player.handle_bullets_right(self.boss_position, self.win, PLAYER_HIT_BOSS)
         self.player.handle_bullets_left(self.boss_position, self.win, PLAYER_HIT_BOSS)
+
         self.player.handle_bullets_right(bat, self.win, PLAYER_HIT_BAT)
         self.player.handle_bullets_left(bat, self.win, PLAYER_HIT_BAT)
+
         self.player.handle_bullets_right(bat_1, self.win, PLAYER_HIT_BAT_1)
         self.player.handle_bullets_left(bat_1, self.win, PLAYER_HIT_BAT_1)
+
         self.player.handle_bullets_right(bat_2, self.win, PLAYER_HIT_BAT_2)
         self.player.handle_bullets_left(bat_2, self.win, PLAYER_HIT_BAT_2)
+
+        self.player.handle_bullets_right(self.mage_1_position, self.win, PLAYER_HIT_MAGE_1)
+        self.player.handle_bullets_left(self.mage_1_position, self.win, PLAYER_HIT_MAGE_1)
+
+        self.player.handle_bullets_right(self.mage_2_position, self.win, PLAYER_HIT_MAGE_2)
+        self.player.handle_bullets_left(self.mage_2_position, self.win, PLAYER_HIT_MAGE_2)
+
         self.boss.handle_bullets_right(self.player_position, self.win, BOSS_HIT_PLAYER)
         self.boss.handle_bullets_left(self.player_position, self.win, BOSS_HIT_PLAYER)
+
+        self.mage_1.handle_bullets_right(self.player_position, self.win, MAGE_1_HIT_PLAYER)
+        self.mage_2.handle_bullets_left(self.player_position, self.win, MAGE_2_HIT_PLAYER)
 
     def menu_screen(self):
         main_menu = True
@@ -309,8 +379,8 @@ class Game:
         self.stage = 0
 
         self.bat = Monster(0, 0)
-        self.bat_1 = Monster(900, 150)
-        self.bat_2 = Monster(900, 500)
+        self.bat_1 = Monster(900, 0)
+        self.bat_2 = Monster(900, 550)
 
         self.bat_health = BAT_HEALTH
         self.bat_1_health = BAT_HEALTH
@@ -323,6 +393,18 @@ class Game:
         self.bat_is_alive = False
         self.bat_1_is_alive = False
         self.bat_2_is_alive = False
+
+        self.mage_1 = Mage(0, 250)
+        self.mage_2 = Mage(800, 50)
+
+        self.mage_1_health = MAGE_HEALTH
+        self.mage_2_health = MAGE_HEALTH
+
+        self.mage_1_position = self.mage_1.rect
+        self.mage_2_position = self.mage_2.rect
+
+        self.mage_1_is_alive = False
+        self.mage_2_is_alive = False
 
         self.main()
 
@@ -345,6 +427,18 @@ class Game:
             self.bat_1_health = BAT_HEALTH
             self.bat_2_health = BAT_HEALTH
 
+            self.mage_1 = Mage(0, 250)
+            self.mage_2 = Mage(800, 50)
+
+            self.mage_1_health = MAGE_HEALTH
+            self.mage_2_health = MAGE_HEALTH
+
+            self.mage_1_position = self.mage_1.rect
+            self.mage_2_position = self.mage_2.rect
+
+            self.mage_1_is_alive = False
+            self.mage_2_is_alive = False
+
             if self.stage == 5:
                 pass
         else:
@@ -361,9 +455,27 @@ class Game:
         if self.bat_2_health < 1:
             self.bat_2_is_alive = True
 
+        if self.mage_1_health < 1:
+            self.mage_1_is_alive = True
+
+        if self.mage_2_health < 1:
+            self.mage_2_is_alive = True
+
         stage_1 = [self.bat_is_alive]
         stage_2 = [self.bat_is_alive, self.bat_1_is_alive]
-        stage_3 = [self.bat_is_alive, self.bat_1_is_alive, self.bat_2_is_alive]
+        stage_3 = [
+            self.bat_is_alive,
+            self.bat_1_is_alive,
+            self.bat_2_is_alive,
+            self.mage_1_is_alive,
+        ]
+        stage_4 = [
+            self.bat_is_alive,
+            self.bat_1_is_alive,
+            self.bat_2_is_alive,
+            self.mage_1_is_alive,
+            self.mage_2_is_alive,
+        ]
 
         if self.stage == 0:
             self.next_stage_values()
@@ -378,7 +490,7 @@ class Game:
         elif all(stage_3) is True and self.stage == 3:
             self.next_stage_values()
             return self.stage + 1
-        elif all(stage_3) is True and self.stage == 4:
+        elif all(stage_4) is True and self.stage == 4:
             self.next_stage_values()
             return self.stage + 1
         else:

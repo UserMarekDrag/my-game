@@ -20,7 +20,7 @@ class Creature:
         self.CREATURE = pygame.transform.scale(
             self.CREATURE_IMAGE, (self.size_width, self.size_height))
 
-    def hit_enemy(self, enemy_health):
+    def hit_enemy(self, enemy_health: object) -> object:
         enemy_health -= 1
         BULLET_HIT_SOUND.play()
         return enemy_health
@@ -219,3 +219,62 @@ class Monster(Creature):
             monster.y += VEL_MONSTER
         if player.y < monster.y:
             monster.y -= VEL_MONSTER
+
+
+class Mage(Creature):
+
+    def __init__(self, first_position_x, first_position_y):
+        self.FIRST_POSITION_X = first_position_x
+        self.FIRST_POSITION_Y = first_position_y
+        self.SIZE_WIDTH = 60
+        self.SIZE_HEIGHT = 100
+        super().__init__(
+            'Mage', MAGE_IMAGE, self.FIRST_POSITION_X,
+            self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
+
+        self.mage_bullets_right = []
+        self.mage_bullets_left = []
+
+    def shoot_right(self, mage, player):
+        if mage.x < player.x and len(self.mage_bullets_right) < MAGE_MAX_BULLETS:
+            bullet = pygame.Rect(
+                mage.x - 10, mage.y + 50, 20, 5)
+            self.mage_bullets_right.append(bullet)
+            BULLET_FIRE_SOUND.play()
+
+    def shoot_left(self, mage, player):
+        if mage.x > player.x and len(self.mage_bullets_left) < MAGE_MAX_BULLETS:
+            bullet = pygame.Rect(
+                mage.x - 10, mage.y + 50, 20, 5)
+            self.mage_bullets_left.append(bullet)
+            BULLET_FIRE_SOUND.play()
+
+    def handle_bullets_right(self, enemy, win, hit):
+        for bullet in self.mage_bullets_right:
+            bullet.x += BOSS_BULLET_VEL
+            if enemy.colliderect(bullet):
+                pygame.event.post(pygame.event.Event(hit))
+                self.mage_bullets_right.remove(bullet)
+            elif bullet.x > WIDTH:
+                self.mage_bullets_right.remove(bullet)
+            elif bullet.x < 0:
+                self.mage_bullets_right.remove(bullet)
+        self.draw_bullets(win, self.mage_bullets_right)
+
+    def handle_bullets_left(self, enemy, win, hit):
+        for bullet in self.mage_bullets_left:
+            bullet.x -= BOSS_BULLET_VEL
+            if enemy.colliderect(bullet):
+                pygame.event.post(pygame.event.Event(hit))
+                self.mage_bullets_left.remove(bullet)
+            elif bullet.x > WIDTH:
+                self.mage_bullets_left.remove(bullet)
+            elif bullet.x < 0:
+                self.mage_bullets_left.remove(bullet)
+        self.draw_bullets(win, self.mage_bullets_left)
+
+    def draw_bullets(self, win, mage_bullets):
+        for bullet in mage_bullets:
+            pygame.draw.rect(win, BLUE, bullet)
+
+        pygame.display.update()
