@@ -48,7 +48,9 @@ COLLISION_VEL = 20
 # shot speed
 BOSS_BULLET_VEL = 10
 PLAYER_BULLET_VEL = 7
-MAX_BULLETS = 3
+
+# number of shots
+PLAYER_MAX_BULLETS = 3
 BOSS_MAX_BULLETS = 5
 MAGE_MAX_BULLETS = 3
 
@@ -56,6 +58,7 @@ MAGE_MAX_BULLETS = 3
 pygame.font.init()
 HEALTH_FONT = pygame.font.SysFont('comicsans', 20)
 WINNER_FONT = pygame.font.SysFont('comicsans', 100)
+STAGE_NUMB_FONT = pygame.font.SysFont('comicsans', 100)
 
 # color
 WHITE = (255, 255, 255)

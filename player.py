@@ -24,7 +24,7 @@ class Player(Creature):
             player.x -= VEL_PLAYER
         if keys_pressed[pygame.K_RIGHT] and player.x + VEL_PLAYER + player.width < WIDTH:  # RIGHT
             player.x += VEL_PLAYER
-        if keys_pressed[pygame.K_UP] and player.y - VEL_PLAYER > 0:  # UP
+        if keys_pressed[pygame.K_UP] and player.y - VEL_PLAYER > 50:  # UP
             player.y -= VEL_PLAYER
         if keys_pressed[pygame.K_DOWN] and player.y + VEL_PLAYER + player.height < HEIGHT:  # DOWN
             player.y += VEL_PLAYER
@@ -37,7 +37,7 @@ class Player(Creature):
 
     def shoot_right(self, event, player):
 
-        if event.key == pygame.K_x and len(self.player_bullets_right) < MAX_BULLETS:
+        if event.key == pygame.K_x and len(self.player_bullets_right) < PLAYER_MAX_BULLETS:
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
             self.player_bullets_right.append(bullet)
@@ -45,7 +45,7 @@ class Player(Creature):
 
     def shoot_left(self, event, player):
 
-        if event.key == pygame.K_z and len(self.player_bullets_left) < MAX_BULLETS:
+        if event.key == pygame.K_z and len(self.player_bullets_left) < PLAYER_MAX_BULLETS:
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
             self.player_bullets_left.append(bullet)

@@ -25,12 +25,6 @@ class Creature:
         BULLET_HIT_SOUND.play()
         return enemy_health
 
-    def health_draw(self, health, win, height, name):
-        health_text = HEALTH_FONT.render(
-            f"{str(name)} Heath: " + str(health), True, WHITE)
-
-        win.blit(health_text, (10, height))
-
     def draw_update(self):
         pygame.display.update()
 
@@ -199,7 +193,7 @@ class Boss(Creature):
         pygame.display.update()
 
 
-class Monster(Creature):
+class Bat(Creature):
 
     def __init__(self, first_position_x, first_position_y):
         self.FIRST_POSITION_X = first_position_x
