@@ -4,7 +4,6 @@ from config import *
 from sounds import *
 from player import *
 from monsters import *
-from animation import *
 from map import *
 from menu import *
 
