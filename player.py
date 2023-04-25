@@ -1,7 +1,10 @@
 import pygame
 from monsters import *
-from config import *
+from config import Config
 from sounds import *
+
+
+config = Config()
 
 
 class Player(Creature):
@@ -20,24 +23,24 @@ class Player(Creature):
 
     def static_handle_movement(self, keys_pressed, player):
 
-        if keys_pressed[pygame.K_LEFT] and player.x - VEL_PLAYER > 0:  # LEFT
-            player.x -= VEL_PLAYER
-        if keys_pressed[pygame.K_RIGHT] and player.x + VEL_PLAYER + player.width < WIDTH:  # RIGHT
-            player.x += VEL_PLAYER
-        if keys_pressed[pygame.K_UP] and player.y - VEL_PLAYER > 50:  # UP
-            player.y -= VEL_PLAYER
-        if keys_pressed[pygame.K_DOWN] and player.y + VEL_PLAYER + player.height < HEIGHT:  # DOWN
-            player.y += VEL_PLAYER
+        if keys_pressed[pygame.K_LEFT] and player.x - config.VEL_PLAYER > 0:  # LEFT
+            player.x -= config.VEL_PLAYER
+        if keys_pressed[pygame.K_RIGHT] and player.x + config.VEL_PLAYER + player.width < config.WIDTH:  # RIGHT
+            player.x += config.VEL_PLAYER
+        if keys_pressed[pygame.K_UP] and player.y - config.VEL_PLAYER > 50:  # UP
+            player.y -= config.VEL_PLAYER
+        if keys_pressed[pygame.K_DOWN] and player.y + config.VEL_PLAYER + player.height < config.HEIGHT:  # DOWN
+            player.y += config.VEL_PLAYER
 
     def draw_bullets(self, win, player_bullets):
 
         for bullet in player_bullets:
-            pygame.draw.rect(win, YELLOW, bullet)
+            pygame.draw.rect(win, config.YELLOW, bullet)
         self.draw_update()
 
     def shoot_right(self, event, player):
 
-        if event.key == pygame.K_x and len(self.player_bullets_right) < PLAYER_MAX_BULLETS:
+        if event.key == pygame.K_x and len(self.player_bullets_right) < config.PLAYER_MAX_BULLETS:
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
             self.player_bullets_right.append(bullet)
@@ -45,7 +48,7 @@ class Player(Creature):
 
     def shoot_left(self, event, player):
 
-        if event.key == pygame.K_z and len(self.player_bullets_left) < PLAYER_MAX_BULLETS:
+        if event.key == pygame.K_z and len(self.player_bullets_left) < config.PLAYER_MAX_BULLETS:
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
             self.player_bullets_left.append(bullet)
@@ -54,11 +57,11 @@ class Player(Creature):
     def handle_bullets_right(self, enemy, win, hit):
 
         for bullet in self.player_bullets_right:
-            bullet.x += PLAYER_BULLET_VEL
+            bullet.x += config.PLAYER_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.player_bullets_right.remove(bullet)
-            elif bullet.x > WIDTH:
+            elif bullet.x > config.WIDTH:
                 self.player_bullets_right.remove(bullet)
             elif bullet.x < 0:
                 self.player_bullets_right.remove(bullet)
@@ -67,11 +70,11 @@ class Player(Creature):
     def handle_bullets_left(self, enemy, win, hit):
 
         for bullet in self.player_bullets_left:
-            bullet.x -= PLAYER_BULLET_VEL
+            bullet.x -= config.PLAYER_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.player_bullets_left.remove(bullet)
-            elif bullet.x > WIDTH:
+            elif bullet.x > config.WIDTH:
                 self.player_bullets_left.remove(bullet)
             elif bullet.x < 0:
                 self.player_bullets_left.remove(bullet)

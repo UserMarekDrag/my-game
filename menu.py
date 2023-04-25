@@ -1,19 +1,22 @@
 import pygame
-from config import *
+from config import Config
+
+
+config = Config()
 
 
 class Button:
     def __init__(self, x, y, content):
-        self.font_size = FONT_SIZE
+        self.font_size = config.FONT_SIZE
         self.font = pygame.font.SysFont('comicsans', self.font_size)
         self.content = content
 
         self.x, self.y = x, y
-        self.width = BUTTON_WIDTH
-        self.height = BUTTON_HEIGHT
+        self.width = config.BUTTON_WIDTH
+        self.height = config.BUTTON_HEIGHT
 
-        self.fg = BUTTON_FONT_GROUND_COLOR
-        self.bg = BUTTON_GROUND_COLOR
+        self.fg = config.BUTTON_FONT_GROUND_COLOR
+        self.bg = config.BUTTON_GROUND_COLOR
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill(self.bg)
         self.rect = self.image.get_rect()

@@ -1,7 +1,10 @@
 import pygame
 import os
-from config import *
+from config import Config
 from sounds import *
+
+
+config = Config()
 
 
 class Creature:
@@ -33,16 +36,16 @@ class Creature:
 
         if collide:
             if player.x < enemy.x and player.x > 10:
-                player.x -= COLLISION_VEL
+                player.x -= config.COLLISION_VEL
                 pygame.time.wait(100)
-            elif player.x > enemy.x and player.x < (WIDTH - 40):
-                player.x += COLLISION_VEL
+            elif player.x > enemy.x and player.x < (config.WIDTH - 40):
+                player.x += config.COLLISION_VEL
                 pygame.time.wait(100)
             elif player.y < enemy.y and player.y > 20:
-                player.y -= COLLISION_VEL
+                player.y -= config.COLLISION_VEL
                 pygame.time.wait(100)
-            elif player.y > enemy.y and player.y < HEIGHT - 80:
-                player.y += COLLISION_VEL
+            elif player.y > enemy.y and player.y < config.HEIGHT - 80:
+                player.y += config.COLLISION_VEL
                 pygame.time.wait(100)
 
             player_health = self.hit_enemy(player_health)
@@ -60,7 +63,7 @@ class Boss(Creature):
         self.SIZE_WIDTH = 60
         self.SIZE_HEIGHT = 100
         super().__init__(
-            'Boss', BOSS_IMAGE, self.FIRST_POSITION_X,
+            'Boss', config.BOSS_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
         self.boss_bullets_right = []
@@ -80,9 +83,9 @@ class Boss(Creature):
         # center
         if self.position == 'center' and self.time_break:
             if boss.x > 400:
-                boss.x -= VEL_BOSS
+                boss.x -= config.VEL_BOSS
             if boss.y > 150:
-                boss.y -= VEL_BOSS
+                boss.y -= config.VEL_BOSS
             if boss.x == 400 and boss.y == 150:
                 self.position = 'left_up'
                 self.time_break = False
@@ -95,9 +98,9 @@ class Boss(Creature):
         #  go to left up
         elif self.position == 'left_up' and self.time_break:
             if boss.x > 100:
-                boss.x -= VEL_BOSS
+                boss.x -= config.VEL_BOSS
             if boss.y > 80:
-                boss.y -= VEL_BOSS
+                boss.y -= config.VEL_BOSS
             if boss.x == 100 and boss.y == 80:
                 self.position = 'right_up'
                 self.time_break = False
@@ -110,7 +113,7 @@ class Boss(Creature):
         #  go to right up
         elif self.position == 'right_up' and self.time_break:
             if boss.x < 600:
-                boss.x += VEL_BOSS
+                boss.x += config.VEL_BOSS
             if boss.x == 600 and boss.y == 80:
                 self.position = 'left_down'
                 self.time_break = False
@@ -123,9 +126,9 @@ class Boss(Creature):
         #  go to left_down
         elif self.position == 'left_down' and self.time_break:
             if boss.x > 100:
-                boss.x -= VEL_BOSS
+                boss.x -= config.VEL_BOSS
             if boss.y < 250:
-                boss.y += VEL_BOSS
+                boss.y += config.VEL_BOSS
             if boss.x == 100 and boss.y == 250:
                 self.position = 'right_down'
                 self.time_break = False
@@ -138,7 +141,7 @@ class Boss(Creature):
         #  go to right_down
         elif self.position == 'right_down' and self.time_break:
             if boss.x < 600:
-                boss.x += VEL_BOSS
+                boss.x += config.VEL_BOSS
             if boss.x == 600 and boss.y == 250:
                 self.position = 'center'
                 self.time_break = False
@@ -149,14 +152,14 @@ class Boss(Creature):
             self.waiting()
 
     def shoot_right(self, boss, player):
-        if boss.x < player.x and len(self.boss_bullets_right) < BOSS_MAX_BULLETS:
+        if boss.x < player.x and len(self.boss_bullets_right) < config.BOSS_MAX_BULLETS:
             bullet = pygame.Rect(
                 boss.x - 10, boss.y + 50, 30, 10)
             self.boss_bullets_right.append(bullet)
             BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, boss, player):
-        if boss.x > player.x and len(self.boss_bullets_left) < BOSS_MAX_BULLETS:
+        if boss.x > player.x and len(self.boss_bullets_left) < config.BOSS_MAX_BULLETS:
             bullet = pygame.Rect(
                 boss.x - 10, boss.y + 50, 30, 10)
             self.boss_bullets_left.append(bullet)
@@ -164,11 +167,11 @@ class Boss(Creature):
 
     def handle_bullets_right(self, enemy, win, hit):
         for bullet in self.boss_bullets_right:
-            bullet.x += BOSS_BULLET_VEL
+            bullet.x += config.BOSS_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.boss_bullets_right.remove(bullet)
-            elif bullet.x > WIDTH:
+            elif bullet.x > config.WIDTH:
                 self.boss_bullets_right.remove(bullet)
             elif bullet.x < 0:
                 self.boss_bullets_right.remove(bullet)
@@ -176,11 +179,11 @@ class Boss(Creature):
 
     def handle_bullets_left(self, enemy, win, hit):
         for bullet in self.boss_bullets_left:
-            bullet.x -= BOSS_BULLET_VEL
+            bullet.x -= config.BOSS_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.boss_bullets_left.remove(bullet)
-            elif bullet.x > WIDTH:
+            elif bullet.x > config.WIDTH:
                 self.boss_bullets_left.remove(bullet)
             elif bullet.x < 0:
                 self.boss_bullets_left.remove(bullet)
@@ -188,7 +191,7 @@ class Boss(Creature):
 
     def draw_bullets(self, win, boss_bullets):
         for bullet in boss_bullets:
-            pygame.draw.rect(win, RED, bullet)
+            pygame.draw.rect(win, config.RED, bullet)
 
         pygame.display.update()
 
@@ -201,18 +204,18 @@ class Bat(Creature):
         self.SIZE_WIDTH = 80
         self.SIZE_HEIGHT = 60
         super().__init__(
-            'Monster', MONSTER_IMAGE, self.FIRST_POSITION_X,
+            'Monster', config.MONSTER_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
     def auto_handle_movement(self, monster, player):
         if player.x > monster.x:
-            monster.x += VEL_MONSTER
+            monster.x += config.VEL_MONSTER
         if player.x < monster.x:
-            monster.x -= VEL_MONSTER
+            monster.x -= config.VEL_MONSTER
         if player.y > monster.y:
-            monster.y += VEL_MONSTER
+            monster.y += config.VEL_MONSTER
         if player.y < monster.y:
-            monster.y -= VEL_MONSTER
+            monster.y -= config.VEL_MONSTER
 
 
 class Mage(Creature):
@@ -223,21 +226,21 @@ class Mage(Creature):
         self.SIZE_WIDTH = 60
         self.SIZE_HEIGHT = 100
         super().__init__(
-            'Mage', MAGE_IMAGE, self.FIRST_POSITION_X,
+            'Mage', config.MAGE_IMAGE, self.FIRST_POSITION_X,
             self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
         self.mage_bullets_right = []
         self.mage_bullets_left = []
 
     def shoot_right(self, mage, player):
-        if mage.x < player.x and len(self.mage_bullets_right) < MAGE_MAX_BULLETS:
+        if mage.x < player.x and len(self.mage_bullets_right) < config.MAGE_MAX_BULLETS:
             bullet = pygame.Rect(
                 mage.x - 10, mage.y + 50, 20, 5)
             self.mage_bullets_right.append(bullet)
             BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, mage, player):
-        if mage.x > player.x and len(self.mage_bullets_left) < MAGE_MAX_BULLETS:
+        if mage.x > player.x and len(self.mage_bullets_left) < config.MAGE_MAX_BULLETS:
             bullet = pygame.Rect(
                 mage.x - 10, mage.y + 50, 20, 5)
             self.mage_bullets_left.append(bullet)
@@ -245,11 +248,11 @@ class Mage(Creature):
 
     def handle_bullets_right(self, enemy, win, hit):
         for bullet in self.mage_bullets_right:
-            bullet.x += BOSS_BULLET_VEL
+            bullet.x += config.BOSS_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.mage_bullets_right.remove(bullet)
-            elif bullet.x > WIDTH:
+            elif bullet.x > config.WIDTH:
                 self.mage_bullets_right.remove(bullet)
             elif bullet.x < 0:
                 self.mage_bullets_right.remove(bullet)
@@ -257,11 +260,11 @@ class Mage(Creature):
 
     def handle_bullets_left(self, enemy, win, hit):
         for bullet in self.mage_bullets_left:
-            bullet.x -= BOSS_BULLET_VEL
+            bullet.x -= config.BOSS_BULLET_VEL
             if enemy.colliderect(bullet):
                 pygame.event.post(pygame.event.Event(hit))
                 self.mage_bullets_left.remove(bullet)
-            elif bullet.x > WIDTH:
+            elif bullet.x > config.WIDTH:
                 self.mage_bullets_left.remove(bullet)
             elif bullet.x < 0:
                 self.mage_bullets_left.remove(bullet)
@@ -269,6 +272,6 @@ class Mage(Creature):
 
     def draw_bullets(self, win, mage_bullets):
         for bullet in mage_bullets:
-            pygame.draw.rect(win, BLUE, bullet)
+            pygame.draw.rect(win, config.BLUE, bullet)
 
         pygame.display.update()

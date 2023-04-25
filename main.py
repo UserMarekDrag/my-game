@@ -1,32 +1,33 @@
 import sys
 import pygame
-from config import *
+from config import Config
 from sounds import *
 from player import *
 from monsters import *
 from map import *
 from menu import *
 
-pygame.display.set_caption(GAME_NAME)
+config = Config()
+pygame.display.set_caption(config.GAME_NAME)
 
 
 class Game:
     def __init__(self):
-        self.win = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.win = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
         self.clock = pygame.time.Clock()
         self.run = True
         self.stage = 1
         self.next_stage_draw = True
         self.character_choice = "male"
         self.character_dictionary = {
-            "male": MALE_CHARACTER,
-            "female": FEMALE_CHARACTER,
+            "male": config.MALE_CHARACTER,
+            "female": config.FEMALE_CHARACTER,
         }
         self.player = Player(self.character_dictionary[self.character_choice])
         self.boss = Boss()
 
-        self.player_health = PLAYER_HEALTH
-        self.boss_health = BOSS_HEALTH
+        self.player_health = config.PLAYER_HEALTH
+        self.boss_health = config.BOSS_HEALTH
 
         self.stop = False
 
@@ -37,9 +38,9 @@ class Game:
         self.bat_2 = Bat(900, 550)
         self.bat_3 = Bat(0, 30)
 
-        self.bat_1_health = BAT_HEALTH
-        self.bat_2_health = BAT_HEALTH
-        self.bat_3_health = BAT_HEALTH
+        self.bat_1_health = config.BAT_HEALTH
+        self.bat_2_health = config.BAT_HEALTH
+        self.bat_3_health = config.BAT_HEALTH
 
         self.bat_1_position = self.bat_1.rect
         self.bat_2_position = self.bat_2.rect
@@ -52,8 +53,8 @@ class Game:
         self.mage_1 = Mage(0, 250)
         self.mage_2 = Mage(800, 50)
 
-        self.mage_1_health = MAGE_HEALTH
-        self.mage_2_health = MAGE_HEALTH
+        self.mage_1_health = config.MAGE_HEALTH
+        self.mage_2_health = config.MAGE_HEALTH
 
         self.mage_1_position = self.mage_1.rect
         self.mage_2_position = self.mage_2.rect
@@ -63,8 +64,8 @@ class Game:
 
     def character_update(self):
         self.character_dictionary = {
-            "male": MALE_CHARACTER,
-            "female": FEMALE_CHARACTER,
+            "male": config.MALE_CHARACTER,
+            "female": config.FEMALE_CHARACTER,
         }
         self.player = Player(self.character_dictionary[self.character_choice])
 
@@ -81,10 +82,10 @@ class Game:
                 self.boss.shoot_right(self.boss_position, self.player_position)
                 self.boss.shoot_left(self.boss_position, self.player_position)
 
-                if event.type == BOSS_HIT_PLAYER:
+                if event.type == config.BOSS_HIT_PLAYER:
                     self.player_health = self.player.hit_enemy(self.player_health)
 
-                if event.type == PLAYER_HIT_BOSS:
+                if event.type == config.PLAYER_HIT_BOSS:
                     self.boss_health = self.boss.hit_enemy(self.boss_health)
 
             if self.stage > 2:
@@ -92,35 +93,35 @@ class Game:
             if self.stage > 3:
                 self.mage_2.shoot_left(self.mage_2_position, self.player_position)
 
-            if event.type == BAT_HIT_PLAYER:
+            if event.type == config.BAT_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
-            if event.type == PLAYER_HIT_BAT:
+            if event.type == config.PLAYER_HIT_BAT:
                 self.bat_3_health = self.bat_3.hit_enemy(self.bat_3_health)
-            if event.type == BAT_1_HIT_PLAYER:
+            if event.type == config.BAT_1_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
-            if event.type == PLAYER_HIT_BAT_1:
+            if event.type == config.PLAYER_HIT_BAT_1:
                 self.bat_1_health = self.bat_1.hit_enemy(self.bat_1_health)
-            if event.type == BAT_2_HIT_PLAYER:
+            if event.type == config.BAT_2_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
-            if event.type == PLAYER_HIT_BAT_2:
+            if event.type == config.PLAYER_HIT_BAT_2:
                 self.bat_2_health = self.bat_2.hit_enemy(self.bat_2_health)
-            if event.type == MAGE_1_HIT_PLAYER:
+            if event.type == config.MAGE_1_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
-            if event.type == PLAYER_HIT_MAGE_1:
+            if event.type == config.PLAYER_HIT_MAGE_1:
                 self.mage_1_health = self.mage_1.hit_enemy(self.mage_1_health)
-            if event.type == MAGE_2_HIT_PLAYER:
+            if event.type == config.MAGE_2_HIT_PLAYER:
                 self.player_health = self.player.hit_enemy(self.player_health)
-            if event.type == PLAYER_HIT_MAGE_2:
+            if event.type == config.PLAYER_HIT_MAGE_2:
                 self.mage_2_health = self.mage_2.hit_enemy(self.mage_2_health)
 
     def txt_draw(self, health, width, height, name, health_txt, font):
         text = font.render(
-            f"{str(name)} {str(health_txt)}: " + str(health), True, BLUE)
+            f"{str(name)} {str(health_txt)}: " + str(health), True, config.BLUE)
 
         self.win.blit(text, (width, height))
 
     def draw_stage(self):
-        self.txt_draw(self.stage, WIDTH / 2 - 200, HEIGHT / 2 - 150, 'Stage', '', STAGE_NUMB_FONT)
+        self.txt_draw(self.stage, config.WIDTH / 2 - 200, config.HEIGHT / 2 - 150, 'Stage', '', config.STAGE_NUMB_FONT)
 
         pygame.display.update()
         pygame.time.wait(1000)
@@ -128,17 +129,17 @@ class Game:
     def draw(self):
         self.win.blit(BACKGROUND_STATS, (0, 0))
         self.win.blit(BACKGROUND_GAME, (0, 30))
-        self.clock.tick(FPS)
+        self.clock.tick(config.FPS)
 
         if self.next_stage_draw:
             self.draw_stage()
             self.next_stage_draw = False
 
-        self.txt_draw(self.player_health, 10, 1, 'Player', 'Health', HEALTH_FONT)
-        self.txt_draw(self.stage, 400, 1, 'Stage', '', HEALTH_FONT)
+        self.txt_draw(self.player_health, 10, 1, 'Player', 'Health', config.HEALTH_FONT)
+        self.txt_draw(self.stage, 400, 1, 'Stage', '', config.HEALTH_FONT)
 
         if self.stage == 5:
-            self.txt_draw(self.boss_health, 700, 1, 'Boss', 'Health', HEALTH_FONT)
+            self.txt_draw(self.boss_health, 700, 1, 'Boss', 'Health', config.HEALTH_FONT)
 
         self.win.blit(self.player.CREATURE, (self.player_position.x, self.player_position.y))
 
@@ -203,9 +204,9 @@ class Game:
             self.stop = True
 
     def draw_winner(self, winner_text):
-        draw_text = WINNER_FONT.render(winner_text, True, WHITE)
-        self.win.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2,
-                                  HEIGHT / 2 - draw_text.get_height()))
+        draw_text = config.WINNER_FONT.render(winner_text, True, config.WHITE)
+        self.win.blit(draw_text, (config.WIDTH / 2 - draw_text.get_width() / 2,
+                                  config.HEIGHT / 2 - draw_text.get_height()))
         pygame.display.update()
         pygame.time.wait(2000)
         self.menu_end(draw_text)
@@ -233,36 +234,36 @@ class Game:
         self.health_count()
         self.character_movement()
 
-        self.player.handle_bullets_right(self.boss_position, self.win, PLAYER_HIT_BOSS)
-        self.player.handle_bullets_left(self.boss_position, self.win, PLAYER_HIT_BOSS)
+        self.player.handle_bullets_right(self.boss_position, self.win, config.PLAYER_HIT_BOSS)
+        self.player.handle_bullets_left(self.boss_position, self.win, config.PLAYER_HIT_BOSS)
 
-        self.player.handle_bullets_right(self.bat_1_position, self.win, PLAYER_HIT_BAT_1)
-        self.player.handle_bullets_left(self.bat_1_position, self.win, PLAYER_HIT_BAT_1)
+        self.player.handle_bullets_right(self.bat_1_position, self.win, config.PLAYER_HIT_BAT_1)
+        self.player.handle_bullets_left(self.bat_1_position, self.win, config.PLAYER_HIT_BAT_1)
 
-        self.player.handle_bullets_right(self.bat_2_position, self.win, PLAYER_HIT_BAT_2)
-        self.player.handle_bullets_left(self.bat_2_position, self.win, PLAYER_HIT_BAT_2)
+        self.player.handle_bullets_right(self.bat_2_position, self.win, config.PLAYER_HIT_BAT_2)
+        self.player.handle_bullets_left(self.bat_2_position, self.win, config.PLAYER_HIT_BAT_2)
 
-        self.player.handle_bullets_right(self.bat_3_position, self.win, PLAYER_HIT_BAT)
-        self.player.handle_bullets_left(self.bat_3_position, self.win, PLAYER_HIT_BAT)
+        self.player.handle_bullets_right(self.bat_3_position, self.win, config.PLAYER_HIT_BAT)
+        self.player.handle_bullets_left(self.bat_3_position, self.win, config.PLAYER_HIT_BAT)
 
-        self.player.handle_bullets_right(self.mage_1_position, self.win, PLAYER_HIT_MAGE_1)
-        self.player.handle_bullets_left(self.mage_1_position, self.win, PLAYER_HIT_MAGE_1)
+        self.player.handle_bullets_right(self.mage_1_position, self.win, config.PLAYER_HIT_MAGE_1)
+        self.player.handle_bullets_left(self.mage_1_position, self.win, config.PLAYER_HIT_MAGE_1)
 
-        self.player.handle_bullets_right(self.mage_2_position, self.win, PLAYER_HIT_MAGE_2)
-        self.player.handle_bullets_left(self.mage_2_position, self.win, PLAYER_HIT_MAGE_2)
+        self.player.handle_bullets_right(self.mage_2_position, self.win, config.PLAYER_HIT_MAGE_2)
+        self.player.handle_bullets_left(self.mage_2_position, self.win, config.PLAYER_HIT_MAGE_2)
 
-        self.boss.handle_bullets_right(self.player_position, self.win, BOSS_HIT_PLAYER)
-        self.boss.handle_bullets_left(self.player_position, self.win, BOSS_HIT_PLAYER)
+        self.boss.handle_bullets_right(self.player_position, self.win, config.BOSS_HIT_PLAYER)
+        self.boss.handle_bullets_left(self.player_position, self.win, config.BOSS_HIT_PLAYER)
 
-        self.mage_1.handle_bullets_right(self.player_position, self.win, MAGE_1_HIT_PLAYER)
-        self.mage_2.handle_bullets_left(self.player_position, self.win, MAGE_2_HIT_PLAYER)
+        self.mage_1.handle_bullets_right(self.player_position, self.win, config.MAGE_1_HIT_PLAYER)
+        self.mage_2.handle_bullets_left(self.player_position, self.win, config.MAGE_2_HIT_PLAYER)
 
     def menu_screen(self):
         main_menu = True
 
-        play_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 260, "Start Game")
-        choose_char_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 330, "Character")
-        exit_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 400, "Exit Game")
+        play_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 260, "Start Game")
+        choose_char_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 330, "Character")
+        exit_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 400, "Exit Game")
 
         while main_menu:
             for event in pygame.event.get():
@@ -293,14 +294,14 @@ class Game:
             self.win.blit(play_button.image, play_button.rect)
             self.win.blit(choose_char_button.image, choose_char_button.rect)
             self.win.blit(exit_button.image, exit_button.rect)
-            self.clock.tick(FPS)
+            self.clock.tick(config.FPS)
             pygame.display.update()
 
     def menu_choice_char(self):
         menu_char = True
 
-        male_player = Player(MALE_CHARACTER)
-        female_player = Player(FEMALE_CHARACTER)
+        male_player = Player(config.MALE_CHARACTER)
+        female_player = Player(config.FEMALE_CHARACTER)
 
         char_male_button = Button(190, 400, "MALE")
         char_female_button = Button(470, 400, "FEMALE")
@@ -328,14 +329,14 @@ class Game:
             self.win.blit(female_player.CREATURE_IMAGE, (500, 150))
             self.win.blit(char_male_button.image, char_male_button.rect)
             self.win.blit(char_female_button.image, char_female_button.rect)
-            self.clock.tick(FPS)
+            self.clock.tick(config.FPS)
             pygame.display.update()
 
     def menu_end(self, draw_text):
         menu_end = True
 
-        play_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 330, "Start Again")
-        exit_button = Button(WIDTH / 2 - BUTTON_WIDTH / 2, 400, "Exit Game")
+        play_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 330, "Start Again")
+        exit_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 400, "Exit Game")
 
         while menu_end:
             for event in pygame.event.get():
@@ -355,11 +356,11 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-            self.win.blit(draw_text, (WIDTH / 2 - draw_text.get_width() / 2,
-                                      HEIGHT / 2 - draw_text.get_height()))
+            self.win.blit(draw_text, (config.WIDTH / 2 - draw_text.get_width() / 2,
+                                      config.HEIGHT / 2 - draw_text.get_height()))
             self.win.blit(play_button.image, play_button.rect)
             self.win.blit(exit_button.image, exit_button.rect)
-            self.clock.tick(FPS)
+            self.clock.tick(config.FPS)
             pygame.display.update()
 
     def new_game(self):
@@ -372,8 +373,8 @@ class Game:
         self.boss_position.x = 900
         self.boss_position.y = 150
 
-        self.player_health = PLAYER_HEALTH
-        self.boss_health = BOSS_HEALTH
+        self.player_health = config.PLAYER_HEALTH
+        self.boss_health = config.BOSS_HEALTH
 
         self.stop = False
         self.stage = 1
@@ -383,9 +384,9 @@ class Game:
         self.bat_2 = Bat(900, 550)
         self.bat_3 = Bat(0, 30)
 
-        self.bat_1_health = BAT_HEALTH
-        self.bat_2_health = BAT_HEALTH
-        self.bat_3_health = BAT_HEALTH
+        self.bat_1_health = config.BAT_HEALTH
+        self.bat_2_health = config.BAT_HEALTH
+        self.bat_3_health = config.BAT_HEALTH
 
         self.bat_1_position = self.bat_1.rect
         self.bat_2_position = self.bat_2.rect
@@ -398,8 +399,8 @@ class Game:
         self.mage_1 = Mage(0, 250)
         self.mage_2 = Mage(800, 50)
 
-        self.mage_1_health = MAGE_HEALTH
-        self.mage_2_health = MAGE_HEALTH
+        self.mage_1_health = config.MAGE_HEALTH
+        self.mage_2_health = config.MAGE_HEALTH
 
         self.mage_1_position = self.mage_1.rect
         self.mage_2_position = self.mage_2.rect
@@ -422,9 +423,9 @@ class Game:
             self.bat_2_position = self.bat_2.rect
             self.bat_3_position = self.bat_3.rect
 
-            self.bat_1_health = BAT_HEALTH
-            self.bat_2_health = BAT_HEALTH
-            self.bat_3_health = BAT_HEALTH
+            self.bat_1_health = config.BAT_HEALTH
+            self.bat_2_health = config.BAT_HEALTH
+            self.bat_3_health = config.BAT_HEALTH
 
             self.bat_1_is_alive = False
             self.bat_2_is_alive = False
@@ -433,8 +434,8 @@ class Game:
             self.mage_1 = Mage(0, 250)
             self.mage_2 = Mage(800, 50)
 
-            self.mage_1_health = MAGE_HEALTH
-            self.mage_2_health = MAGE_HEALTH
+            self.mage_1_health = config.MAGE_HEALTH
+            self.mage_2_health = config.MAGE_HEALTH
 
             self.mage_1_position = self.mage_1.rect
             self.mage_2_position = self.mage_2.rect
