@@ -75,8 +75,8 @@ class Game:
             if event.type == pygame.QUIT:
                 self.run = False
             if event.type == pygame.KEYDOWN:
-                self.player.shoot_left(event, self.player_position)
-                self.player.shoot_right(event, self.player_position)
+                self.player.shoot(event, self.player_position, -1)
+                self.player.shoot(event, self.player_position, 1)
 
             if self.stage == 5:
                 self.boss.shoot_right(self.boss_position, self.player_position)
