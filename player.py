@@ -1,10 +1,11 @@
 import pygame
 from monsters import *
 from config import Config
-from sounds import *
+from sounds import Sounds
 
 
 config = Config()
+sounds = Sounds()
 
 
 class Player(Creature):
@@ -44,7 +45,7 @@ class Player(Creature):
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
             self.player_bullets_right.append(bullet)
-            BULLET_FIRE_SOUND.play()
+            sounds.BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, event, player):
 
@@ -52,7 +53,7 @@ class Player(Creature):
             bullet = pygame.Rect(
                 player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
             self.player_bullets_left.append(bullet)
-            BULLET_FIRE_SOUND.play()
+            sounds.BULLET_FIRE_SOUND.play()
 
     def handle_bullets_right(self, enemy, win, hit):
 

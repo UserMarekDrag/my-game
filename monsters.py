@@ -1,10 +1,11 @@
 import pygame
 import os
 from config import Config
-from sounds import *
+from sounds import Sounds
 
 
 config = Config()
+sounds = Sounds()
 
 
 class Creature:
@@ -25,7 +26,7 @@ class Creature:
 
     def hit_enemy(self, enemy_health: object) -> object:
         enemy_health -= 1
-        BULLET_HIT_SOUND.play()
+        sounds.BULLET_HIT_SOUND.play()
         return enemy_health
 
     def draw_update(self):
@@ -156,14 +157,14 @@ class Boss(Creature):
             bullet = pygame.Rect(
                 boss.x - 10, boss.y + 50, 30, 10)
             self.boss_bullets_right.append(bullet)
-            BULLET_FIRE_SOUND.play()
+            sounds.BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, boss, player):
         if boss.x > player.x and len(self.boss_bullets_left) < config.BOSS_MAX_BULLETS:
             bullet = pygame.Rect(
                 boss.x - 10, boss.y + 50, 30, 10)
             self.boss_bullets_left.append(bullet)
-            BULLET_FIRE_SOUND.play()
+            sounds.BULLET_FIRE_SOUND.play()
 
     def handle_bullets_right(self, enemy, win, hit):
         for bullet in self.boss_bullets_right:
@@ -237,14 +238,14 @@ class Mage(Creature):
             bullet = pygame.Rect(
                 mage.x - 10, mage.y + 50, 20, 5)
             self.mage_bullets_right.append(bullet)
-            BULLET_FIRE_SOUND.play()
+            sounds.BULLET_FIRE_SOUND.play()
 
     def shoot_left(self, mage, player):
         if mage.x > player.x and len(self.mage_bullets_left) < config.MAGE_MAX_BULLETS:
             bullet = pygame.Rect(
                 mage.x - 10, mage.y + 50, 20, 5)
             self.mage_bullets_left.append(bullet)
-            BULLET_FIRE_SOUND.play()
+            sounds.BULLET_FIRE_SOUND.play()
 
     def handle_bullets_right(self, enemy, win, hit):
         for bullet in self.mage_bullets_right:

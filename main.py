@@ -1,7 +1,6 @@
 import sys
 import pygame
 from config import Config
-from sounds import *
 from player import *
 from monsters import *
 from backgrounds import Backgrounds
