@@ -2,9 +2,22 @@ import pygame
 
 
 class Config:
+    """
+    A singleton class to manage the configs values used in the game.
+    """
+
     _instance = None
 
     def __new__(cls):
+        """
+        Create a new instance of Config class if it does not exist, otherwise return the existing one.
+
+        Returns:
+        --------
+        cls._instance : Config
+            The instance of the Config class
+        """
+
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             pygame.font.init()
