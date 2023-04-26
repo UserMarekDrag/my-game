@@ -4,9 +4,10 @@ from config import Config
 from sounds import *
 from player import *
 from monsters import *
-from map import *
+from backgrounds import Backgrounds
 from menu import *
 
+backgrounds = Backgrounds()
 config = Config()
 pygame.display.set_caption(config.GAME_NAME)
 
@@ -127,8 +128,8 @@ class Game:
         pygame.time.wait(1000)
 
     def draw(self):
-        self.win.blit(BACKGROUND_STATS, (0, 0))
-        self.win.blit(BACKGROUND_GAME, (0, 30))
+        self.win.blit(backgrounds.BACKGROUND_STATS, (0, 0))
+        self.win.blit(backgrounds.BACKGROUND_GAME, (0, 30))
         self.clock.tick(config.FPS)
 
         if self.next_stage_draw:
@@ -279,7 +280,7 @@ class Game:
                 main_menu = False
 
             elif choose_char_button.is_pressed(mouse_position, mouse_pressed):
-                self.win.blit(BACKGROUND_MENU, (0, 0))
+                self.win.blit(backgrounds.BACKGROUND_MENU, (0, 0))
                 pygame.display.update()
                 pygame.time.wait(100)
                 main_menu = self.menu_choice_char()
@@ -289,8 +290,8 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-            self.win.blit(BACKGROUND_MENU, (0, 0))
-            self.win.blit(LOGO, (270, 50))
+            self.win.blit(backgrounds.BACKGROUND_MENU, (0, 0))
+            self.win.blit(backgrounds.LOGO, (270, 50))
             self.win.blit(play_button.image, play_button.rect)
             self.win.blit(choose_char_button.image, choose_char_button.rect)
             self.win.blit(exit_button.image, exit_button.rect)
