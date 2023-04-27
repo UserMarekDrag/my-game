@@ -1,10 +1,11 @@
 import sys
 import pygame
 from config import Config
-from player import *
+from player import Player
 from monsters import *
 from backgrounds import Backgrounds
 from menu import *
+from event_handler import EventHandler
 
 backgrounds = Backgrounds()
 config = Config()
@@ -75,8 +76,7 @@ class Game:
             if event.type == pygame.QUIT:
                 self.run = False
             if event.type == pygame.KEYDOWN:
-                self.player.shoot(event, self.player_position, -1)
-                self.player.shoot(event, self.player_position, 1)
+                self.player.shoot(event, self.player_position)
 
             if self.stage == 5:
                 self.boss.shoot_right(self.boss_position, self.player_position)
@@ -160,7 +160,7 @@ class Game:
 
     def character_movement(self):
         keys_pressed = pygame.key.get_pressed()
-        self.player.static_handle_movement(keys_pressed, self.player_position)
+        EventHandler.handle_movement(keys_pressed, self.player_position)
 
         if self.stage == 5:
             self.boss.auto_handle_movement(self.boss_position)
@@ -234,23 +234,17 @@ class Game:
         self.health_count()
         self.character_movement()
 
-        self.player.handle_bullets_right(self.boss_position, self.win, config.PLAYER_HIT_BOSS)
-        self.player.handle_bullets_left(self.boss_position, self.win, config.PLAYER_HIT_BOSS)
+        self.player.handle_bullets(self.boss_position, self.win, config.PLAYER_HIT_BOSS)
 
-        self.player.handle_bullets_right(self.bat_1_position, self.win, config.PLAYER_HIT_BAT_1)
-        self.player.handle_bullets_left(self.bat_1_position, self.win, config.PLAYER_HIT_BAT_1)
+        self.player.handle_bullets(self.bat_1_position, self.win, config.PLAYER_HIT_BAT_1)
 
-        self.player.handle_bullets_right(self.bat_2_position, self.win, config.PLAYER_HIT_BAT_2)
-        self.player.handle_bullets_left(self.bat_2_position, self.win, config.PLAYER_HIT_BAT_2)
+        self.player.handle_bullets(self.bat_2_position, self.win, config.PLAYER_HIT_BAT_2)
 
-        self.player.handle_bullets_right(self.bat_3_position, self.win, config.PLAYER_HIT_BAT)
-        self.player.handle_bullets_left(self.bat_3_position, self.win, config.PLAYER_HIT_BAT)
+        self.player.handle_bullets(self.bat_3_position, self.win, config.PLAYER_HIT_BAT)
 
-        self.player.handle_bullets_right(self.mage_1_position, self.win, config.PLAYER_HIT_MAGE_1)
-        self.player.handle_bullets_left(self.mage_1_position, self.win, config.PLAYER_HIT_MAGE_1)
+        self.player.handle_bullets(self.mage_1_position, self.win, config.PLAYER_HIT_MAGE_1)
 
-        self.player.handle_bullets_right(self.mage_2_position, self.win, config.PLAYER_HIT_MAGE_2)
-        self.player.handle_bullets_left(self.mage_2_position, self.win, config.PLAYER_HIT_MAGE_2)
+        self.player.handle_bullets(self.mage_2_position, self.win, config.PLAYER_HIT_MAGE_2)
 
         self.boss.handle_bullets_right(self.player_position, self.win, config.BOSS_HIT_PLAYER)
         self.boss.handle_bullets_left(self.player_position, self.win, config.BOSS_HIT_PLAYER)

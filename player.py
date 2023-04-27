@@ -2,13 +2,16 @@ import pygame
 from monsters import *
 from config import Config
 from sounds import Sounds
+from player_bullet import PlayerBullet
+from drawable import Drawable
+from collidable import Collidable
 
 
 config = Config()
 sounds = Sounds()
 
 
-class Player(Creature):
+class Player(Creature, Drawable, Collidable):
 
     def __init__(self, image_name):
         self.FIRST_POSITION_X = 350
@@ -19,55 +22,38 @@ class Player(Creature):
             'Hero', image_name, self.FIRST_POSITION_X, self.FIRST_POSITION_Y,
             self.SIZE_WIDTH, self.SIZE_HEIGHT)
 
-        self.player_bullets_right = []
-        self.player_bullets_left = []
+        self.bullets = []
 
-    def static_handle_movement(self, keys_pressed, player):
+    def shoot(self, event, position):
+        """Handle shooting event."""
+        if event.key in (pygame.K_x, pygame.K_z):
+            direction = 1 if event.key == pygame.K_x else -1
+            if len(self.bullets) < config.PLAYER_MAX_BULLETS:
+                bullet = PlayerBullet(direction, position.x + self.SIZE_WIDTH, position.y + self.SIZE_HEIGHT // 2 - 2)
+                self.bullets.append(bullet)
+                sounds.BULLET_FIRE_SOUND.play()
 
-        if keys_pressed[pygame.K_LEFT] and player.x - config.VEL_PLAYER > 0:  # LEFT
-            player.x -= config.VEL_PLAYER
-        if keys_pressed[pygame.K_RIGHT] and player.x + config.VEL_PLAYER + player.width < config.WIDTH:  # RIGHT
-            player.x += config.VEL_PLAYER
-        if keys_pressed[pygame.K_UP] and player.y - config.VEL_PLAYER > 50:  # UP
-            player.y -= config.VEL_PLAYER
-        if keys_pressed[pygame.K_DOWN] and player.y + config.VEL_PLAYER + player.height < config.HEIGHT:  # DOWN
-            player.y += config.VEL_PLAYER
+    def update_bullets(self):
+        for bullet in self.bullets:
+            bullet.update()
 
-    def draw_bullets(self, win, direction):
-        player_bullets = self.player_bullets_right if direction == 1 else self.player_bullets_left
-        for bullet in player_bullets:
-            pygame.draw.rect(win, config.YELLOW, bullet)
-        self.draw_update()
+    def draw(self, win):
+        for bullet in self.bullets:
+            bullet.draw(win)
 
-    def shoot(self, event, player, direction):
-        if direction == 1:
-            bullet_key = pygame.K_x
-            player_bullets = self.player_bullets_right
-        else:
-            bullet_key = pygame.K_z
-            player_bullets = self.player_bullets_left
-
-        if event.key == bullet_key and len(player_bullets) < config.PLAYER_MAX_BULLETS:
-            bullet = pygame.Rect(
-                player.x + player.width, player.y + player.height // 2 - 2, 10, 5)
-            player_bullets.append(bullet)
-            sounds.BULLET_FIRE_SOUND.play()
-
-    def handle_bullets(self, enemy, win, hit, direction):
-        player_bullets = self.player_bullets_right if direction == 1 else self.player_bullets_left
-        bullet_vel = config.PLAYER_BULLET_VEL * direction
-        for bullet in player_bullets:
-            bullet.x += bullet_vel
-            if enemy.colliderect(bullet):
+    def handle_bullets(self, enemy, win, hit):
+        self.update_bullets()
+        self.draw(win)
+        for bullet in self.bullets[:]:
+            if bullet.collides_with(enemy):
                 pygame.event.post(pygame.event.Event(hit))
-                player_bullets.remove(bullet)
-            elif bullet.x > config.WIDTH or bullet.x < 0:
-                player_bullets.remove(bullet)
-        self.draw_bullets(win, direction)
+                self.bullets.remove(bullet)
+            elif bullet.is_out_of_screen():
+                self.bullets.remove(bullet)
 
-    def handle_bullets_right(self, enemy, win, hit):
-        self.handle_bullets(enemy, win, hit, 1)
-
-    def handle_bullets_left(self, enemy, win, hit):
-        self.handle_bullets(enemy, win, hit, -1)
+    def check_collision(self, other):
+        """Check if the player collides with another object."""
+        if self.colliderect(other):
+            return True
+        return False
 
