@@ -5,7 +5,7 @@ from player import Player
 from monster import Monster
 from enemy import Bat, Mage, Boss
 from backgrounds import Backgrounds
-from menu import *
+from menu import Menu
 
 backgrounds = Backgrounds()
 config = Config()
@@ -24,12 +24,8 @@ class Game:
         self.stop = False
         self.stage = 0
         self.next_stage_draw = True
-        self.character_choice = "male"
-        self.character_dictionary = {
-            "male": config.MALE_CHARACTER,
-            "female": config.FEMALE_CHARACTER,
-        }
-        self.player = Player(self.character_dictionary[self.character_choice])
+
+        self.player = Player(config.MALE_CHARACTER)
 
         self.bat_1 = Bat(500, 130)
         self.bat_2 = Bat(900, 550)
@@ -41,13 +37,6 @@ class Game:
         self.boss = Boss()
 
         self.enemies = set()
-
-    def character_update(self):
-        self.character_dictionary = {
-            "male": config.MALE_CHARACTER,
-            "female": config.FEMALE_CHARACTER,
-        }
-        self.player = Player(self.character_dictionary[self.character_choice])
 
     def events(self):
 
@@ -123,7 +112,7 @@ class Game:
                                   config.HEIGHT / 2 - draw_text.get_height()))
         pygame.display.update()
         pygame.time.wait(2000)
-        self.menu_end(draw_text)
+        menu.menu_end(draw_text)
 
     def update_fight(self):
         self.character_movement()
@@ -135,111 +124,6 @@ class Game:
                 enemy.handle_monster_bullets(player=self.player, win=self.win)
 
         pygame.display.update()
-
-    def menu_screen(self):
-        main_menu = True
-
-        play_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 260, "Start Game")
-        choose_char_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 330, "Character")
-        exit_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 400, "Exit Game")
-
-        while main_menu:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.run = False
-                    pygame.quit()
-                    sys.exit()
-
-            mouse_position = pygame.mouse.get_pos()
-            mouse_pressed = pygame.mouse.get_pressed()
-
-            if play_button.is_pressed(mouse_position, mouse_pressed):
-                main_menu = False
-
-            elif choose_char_button.is_pressed(mouse_position, mouse_pressed):
-                self.win.blit(backgrounds.BACKGROUND_MENU, (0, 0))
-                pygame.display.update()
-                pygame.time.wait(100)
-                main_menu = self.menu_choice_char()
-
-            elif exit_button.is_pressed(mouse_position, mouse_pressed):
-                self.run = False
-                pygame.quit()
-                sys.exit()
-
-            self.win.blit(backgrounds.BACKGROUND_MENU, (0, 0))
-            self.win.blit(backgrounds.LOGO, (270, 50))
-            self.win.blit(play_button.image, play_button.rect)
-            self.win.blit(choose_char_button.image, choose_char_button.rect)
-            self.win.blit(exit_button.image, exit_button.rect)
-            self.clock.tick(config.FPS)
-            pygame.display.update()
-
-    def menu_choice_char(self):
-        menu_char = True
-
-        male_player = Player(config.MALE_CHARACTER)
-        female_player = Player(config.FEMALE_CHARACTER)
-
-        char_male_button = Button(190, 400, "MALE")
-        char_female_button = Button(470, 400, "FEMALE")
-
-        while menu_char:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    menu_char = False
-                    self.run = False
-
-            mouse_position = pygame.mouse.get_pos()
-            mouse_pressed = pygame.mouse.get_pressed()
-
-            if char_male_button.is_pressed(mouse_position, mouse_pressed):
-                self.character_choice = "male"
-                self.character_update()
-                return False
-
-            elif char_female_button.is_pressed(mouse_position, mouse_pressed):
-                self.character_choice = "female"
-                self.character_update()
-                return False
-
-            self.win.blit(male_player.CREATURE_IMAGE, (310, 150))
-            self.win.blit(female_player.CREATURE_IMAGE, (500, 150))
-            self.win.blit(char_male_button.image, char_male_button.rect)
-            self.win.blit(char_female_button.image, char_female_button.rect)
-            self.clock.tick(config.FPS)
-            pygame.display.update()
-
-    def menu_end(self, draw_text):
-        menu_end = True
-
-        play_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 330, "Start Again")
-        exit_button = Button(config.WIDTH / 2 - config.BUTTON_WIDTH / 2, 400, "Exit Game")
-
-        while menu_end:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    menu_end = False
-                    self.run = False
-
-            mouse_position = pygame.mouse.get_pos()
-            mouse_pressed = pygame.mouse.get_pressed()
-
-            if play_button.is_pressed(mouse_position, mouse_pressed):
-                menu_end = False
-                self.new_game()
-
-            elif exit_button.is_pressed(mouse_position, mouse_pressed):
-                self.run = False
-                pygame.quit()
-                sys.exit()
-
-            self.win.blit(draw_text, (config.WIDTH / 2 - draw_text.get_width() / 2,
-                                      config.HEIGHT / 2 - draw_text.get_height()))
-            self.win.blit(play_button.image, play_button.rect)
-            self.win.blit(exit_button.image, exit_button.rect)
-            self.clock.tick(config.FPS)
-            pygame.display.update()
 
     def new_game(self):
         self.stage = 0
@@ -305,6 +189,7 @@ class Game:
         return self.stage
 
     def main(self):
+        self.player = Player(menu.character_update())
 
         while self.run:
             self.stage = self.next_stage()
@@ -318,7 +203,8 @@ class Game:
 
 
 game = Game()
-game.menu_screen()
+menu = Menu(game)
+menu.menu_screen()
 if __name__ == '__main__':
     game.main()
 
