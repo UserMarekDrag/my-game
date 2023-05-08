@@ -37,13 +37,16 @@ class Config:
 
     # enemy image
     BOSS_IMAGE = 'boss.png'
-    MONSTER_IMAGE = 'bat.png'
+    BAT_IMAGE = 'bat.png'
     MAGE_IMAGE = 'mage.png'
 
     # moving speed
     VEL_PLAYER = 5
-    VEL_MONSTER = 4
+    VEL_BAT = 4
     VEL_BOSS = 5
+
+    # damage
+    DAMAGE = 1
 
     # health amount
     PLAYER_HEALTH = 3
