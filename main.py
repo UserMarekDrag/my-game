@@ -18,7 +18,7 @@ class Game:
     __shooting_enemies = (Mage, Boss)
 
     def __init__(self):
-        self.win = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
+        self.window = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
         self.clock = pygame.time.Clock()
         self.run = True
         self.stop = False
@@ -54,7 +54,7 @@ class Game:
         text = font.render(
             f"{str(name)} {str(health_txt)}: " + str(health), True, config.BLUE)
 
-        self.win.blit(text, (width, height))
+        self.window.blit(text, (width, height))
 
     def draw_stage(self):
         self.txt_draw(self.stage, config.WIDTH / 2 - 200, config.HEIGHT / 2 - 150, 'Stage', '', config.STAGE_NUMB_FONT)
@@ -63,8 +63,8 @@ class Game:
         pygame.time.wait(1000)
 
     def draw(self):
-        self.win.blit(backgrounds.BACKGROUND_STATS, (0, 0))
-        self.win.blit(backgrounds.BACKGROUND_GAME, (0, 30))
+        self.window.blit(backgrounds.BACKGROUND_STATS, (0, 0))
+        self.window.blit(backgrounds.BACKGROUND_GAME, (0, 30))
         self.clock.tick(config.FPS)
 
         self.txt_draw(self.player.health, 10, 1, 'Player', 'Health', config.HEALTH_FONT)
@@ -74,14 +74,14 @@ class Game:
             self.draw_stage()
             self.next_stage_draw = False
 
-        self.player.draw_on_screen(self.win)
+        self.player.draw_on_screen(self.window)
 
         if self.stage == 5:
             self.txt_draw(self.boss.health, 700, 1, 'Boss', 'Health', config.HEALTH_FONT)
 
         for enemy in self.enemies:
             if enemy.is_alive:
-                enemy.draw_on_screen(self.win)
+                enemy.draw_on_screen(self.window)
 
         pygame.display.update()
 
@@ -108,8 +108,8 @@ class Game:
 
     def draw_winner(self, winner_text):
         draw_text = config.WINNER_FONT.render(winner_text, True, config.WHITE)
-        self.win.blit(draw_text, (config.WIDTH / 2 - draw_text.get_width() / 2,
-                                  config.HEIGHT / 2 - draw_text.get_height()))
+        self.window.blit(draw_text, (config.WIDTH / 2 - draw_text.get_width() / 2,
+                                     config.HEIGHT / 2 - draw_text.get_height()))
         pygame.display.update()
         pygame.time.wait(2000)
         menu.menu_end(draw_text)
@@ -120,8 +120,8 @@ class Game:
         for enemy in self.enemies:
             if enemy.is_alive:
                 self.player.check_collision(enemy, Monster)
-                self.player.handle_bullets(enemy=enemy, win=self.win)
-                enemy.handle_monster_bullets(player=self.player, win=self.win)
+                self.player.handle_bullets(enemy=enemy, win=self.window)
+                enemy.handle_monster_bullets(player=self.player, win=self.window)
 
         pygame.display.update()
 
