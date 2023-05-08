@@ -5,13 +5,37 @@ from config import Config
 config = Config()
 
 
+class ButtonBuilder:
+    def __init__(self):
+        self._button = Button()
+
+    def reset(self):
+        self._button = Button()
+
+    def set_position(self, x, y):
+        self._button.x, self._button.y = x, y
+        self._button.rect.x, self._button.rect.y = x, y
+        return self
+
+    def set_content(self, content):
+        self._button.content = content
+        self._button.text = self._button.font.render(content, True, self._button.fg)
+        self._button.text_rect = self._button.text.get_rect(center=(self._button.width / 2, self._button.height / 2))
+        self._button.image.blit(self._button.text, self._button.text_rect)
+        return self
+
+    def build(self):
+        button = self._button
+        self.reset()
+        return button
+
+
 class Button:
-    def __init__(self, x, y, content):
+    def __init__(self):
         self.font_size = config.FONT_SIZE
         self.font = pygame.font.SysFont('comicsans', self.font_size)
-        self.content = content
 
-        self.x, self.y = x, y
+        self.x, self.y = 0, 0
         self.width = config.BUTTON_WIDTH
         self.height = config.BUTTON_HEIGHT
 
@@ -20,12 +44,6 @@ class Button:
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill(self.bg)
         self.rect = self.image.get_rect()
-
-        self.rect.x, self.rect.y = self.x, self.y
-
-        self.text = self.font.render(self.content, True, self.fg)
-        self.text_rect = self.text.get_rect(center=(self.width/2, self.height/2))
-        self.image.blit(self.text, self.text_rect)
 
     def is_pressed(self, position, pressed):
         if self.rect.collidepoint(position):
