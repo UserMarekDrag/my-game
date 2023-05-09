@@ -3,9 +3,10 @@ import pygame
 from config import Config
 from player import Player
 from monster import Monster
-from enemy import Bat, Mage, Boss
+from enemy import Mage, Boss
 from backgrounds import Backgrounds
 from menu import Menu
+from level_manager import LevelManager
 
 backgrounds = Backgrounds()
 config = Config()
@@ -22,21 +23,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.run = True
         self.stop = False
-        self.stage = 0
-        self.next_stage_draw = True
-
-        self.player = Player(config.MALE_CHARACTER)
-
-        self.bat_1 = Bat(500, 130)
-        self.bat_2 = Bat(900, 550)
-        self.bat_3 = Bat(0, 30)
-
-        self.mage_1 = Mage(0, 250)
-        self.mage_2 = Mage(800, 50)
-
-        self.boss = Boss()
-
-        self.enemies = set()
+        self.next_level_draw = True
+        self.player = None
+        self.level_manager = LevelManager()
 
     def events(self):
 
@@ -46,9 +35,9 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 self.player.shoot(event)
 
-            for enemy in self.enemies:
-                if enemy.is_alive and isinstance(enemy, self.__shooting_enemies):
-                    enemy.shoot(self.player)
+        for enemy in self.level_manager.get_enemies():
+            if enemy.is_alive and isinstance(enemy, self.__shooting_enemies):
+                enemy.shoot(self.player)
 
     def txt_draw(self, health, width, height, name, health_txt, font):
         text = font.render(
@@ -56,8 +45,15 @@ class Game:
 
         self.window.blit(text, (width, height))
 
-    def draw_stage(self):
-        self.txt_draw(self.stage, config.WIDTH / 2 - 200, config.HEIGHT / 2 - 150, 'Stage', '', config.STAGE_NUMB_FONT)
+    def draw_level(self):
+        self.txt_draw(
+            self.level_manager.level,
+            config.WIDTH / 2 - 200,
+            config.HEIGHT / 2 - 150,
+            'Level',
+            '',
+            config.LEVEL_NUMB_FONT
+        )
 
         pygame.display.update()
         pygame.time.wait(1000)
@@ -68,18 +64,18 @@ class Game:
         self.clock.tick(config.FPS)
 
         self.txt_draw(self.player.health, 10, 1, 'Player', 'Health', config.HEALTH_FONT)
-        self.txt_draw(self.stage, 400, 1, 'Stage', '', config.HEALTH_FONT)
+        self.txt_draw(self.level_manager.level, 400, 1, 'Level', '', config.HEALTH_FONT)
 
-        if self.next_stage_draw:
-            self.draw_stage()
-            self.next_stage_draw = False
+        if self.next_level_draw:
+            self.draw_level()
+            self.next_level_draw = False
 
         self.player.draw_on_screen(self.window)
 
-        if self.stage == 5:
-            self.txt_draw(self.boss.health, 700, 1, 'Boss', 'Health', config.HEALTH_FONT)
+        if self.level_manager.level == 5:
+            self.txt_draw(self.level_manager.get_boss_hp, 700, 1, 'Boss', 'Health', config.HEALTH_FONT)
 
-        for enemy in self.enemies:
+        for enemy in self.level_manager.get_enemies():
             if enemy.is_alive:
                 enemy.draw_on_screen(self.window)
 
@@ -90,13 +86,13 @@ class Game:
 
         self.player.move(keys=keys_pressed)
 
-        for enemy in self.enemies:
+        for enemy in self.level_manager.get_enemies():
             if enemy.is_alive:
                 enemy.move(target=self.player.rect)
 
-    def health_count(self):
+    def who_win(self):
         winner_text = ""
-        if not self.boss.is_alive and self.stage == 5:
+        if all(enemy.is_alive is False for enemy in self.level_manager.get_enemies()) and self.level_manager.level == 5:
             winner_text = 'You Win!'
 
         elif not self.player.is_alive:
@@ -117,7 +113,7 @@ class Game:
     def update_fight(self):
         self.character_movement()
 
-        for enemy in self.enemies:
+        for enemy in self.level_manager.get_enemies():
             if enemy.is_alive:
                 self.player.check_collision(enemy, Monster)
                 self.player.handle_bullets(enemy=enemy, win=self.window)
@@ -126,77 +122,31 @@ class Game:
         pygame.display.update()
 
     def new_game(self):
-        self.stage = 0
+        self.level_manager.level = 0
+        self.next_level_draw = True
         self.run = True
-
-        self.enemies = set()
-
         self.player.reset()
-
-        self.bat_1.reset(900, 30)
-        self.bat_2.reset(900, 550)
-        self.bat_3.reset(0, 30)
-
-        self.mage_1.reset(0, 250)
-        self.mage_2.reset(800, 50)
-
-        self.boss.reset()
 
         self.main()
 
-    def next_stage_values(self):
+    def next_level(self):
 
-        self.next_stage_draw = True
-
-        if self.stage >= 0:
-            self.enemies.add(self.bat_1)
-
-            self.bat_1.reset(900, 30)
-
-        if self.stage >= 1:
-            self.enemies.add(self.bat_1)
-            self.enemies.add(self.bat_2)
-
-            self.bat_1.reset(900, 30)
-            self.bat_2.reset(900, 550)
-
-        if self.stage >= 2:
-            self.enemies.add(self.bat_3)
-
-            self.bat_3.reset(0, 30)
-
-        if self.stage >= 3:
-            self.enemies.add(self.mage_1)
-
-            self.mage_1.reset(0, 250)
-
-        if self.stage >= 4:
-            self.enemies.add(self.mage_2)
-
-            self.mage_2.reset(800, 50)
-
-        if self.stage == 5:
-            self.enemies.add(self.boss)
-
-            self.boss.reset()
-
-    def next_stage(self):
-
-        if all(enemy.is_alive is False for enemy in self.enemies):
-            if self.stage < 5:
-                self.stage += 1
-            self.next_stage_values()
-        return self.stage
+        if all(enemy.is_alive is False for enemy in self.level_manager.get_enemies()) or self.level_manager.level == 0:
+            self.next_level_draw = True
+            self.level_manager.go_to_next_level()
+        else:
+            return
 
     def main(self):
         self.player = Player(menu.character_update())
 
         while self.run:
-            self.stage = self.next_stage()
+            self.next_level()
             self.events()
             if not self.stop:
                 self.update_fight()
-                self.health_count()
+                self.who_win()
+
             else:
                 break
             self.draw()

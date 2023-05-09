@@ -87,7 +87,7 @@ class Config:
     pygame.font.init()
     HEALTH_FONT = pygame.font.SysFont('comicsans', 20)
     WINNER_FONT = pygame.font.SysFont('comicsans', 100)
-    STAGE_NUMB_FONT = pygame.font.SysFont('comicsans', 100)
+    LEVEL_NUMB_FONT = pygame.font.SysFont('comicsans', 100)
 
     # color
     WHITE = (255, 255, 255)
