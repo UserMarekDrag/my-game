@@ -4,7 +4,7 @@ from enemy import Boss
 
 class LevelManager:
     def __init__(self):
-        self.level = 0
+        self.level = 1
         self.level_strategy = None
         self.enemies = []
 
@@ -37,6 +37,10 @@ class LevelManager:
                 if enemy.health is None:
                     return
                 return enemy.health
+
+    @property
+    def all_enemies_defeated(self):
+        return all(enemy.is_alive is False for enemy in self.enemies)
 
     def go_to_next_level(self):
         """
