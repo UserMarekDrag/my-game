@@ -15,8 +15,8 @@ class Menu:
     """
     A class representing the game menu.
     """
-    def __init__(self, game):
-        self.game = game
+    def __init__(self):
+        self.game = None
 
         self.character_choice = "male"
         self.character_dictionary = {
