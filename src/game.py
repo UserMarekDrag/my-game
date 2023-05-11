@@ -34,10 +34,9 @@ class Game:
         """
         if self.level_manager.all_enemies_defeated and self.level_manager.level == 5:
             return 'You Win!'
-        elif not self.player.is_alive:
+        if not self.player.is_alive:
             return 'You died'
-        else:
-            return ""
+        return None
 
     def draw_winner_and_end_game(self, winner_text):
         """
@@ -66,7 +65,7 @@ class Game:
         """
         Start a new game, resetting the level and player.
         """
-        self.level_manager.level = 1
+        self.level_manager.level = 0
         self.level_manager.enemies = []
         self.player.reset()
 
@@ -78,8 +77,8 @@ class Game:
         Advance to the next level if all enemies are defeated.
         """
         if all(enemy.is_alive is False for enemy in self.level_manager.get_enemies()):
-            self.display_manager.draw_level(self.level_manager)
             self.level_manager.go_to_next_level()
+            self.display_manager.draw_level(self.level_manager)
         else:
             return
 

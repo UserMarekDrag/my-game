@@ -103,8 +103,8 @@ class Menu:
             if result is not None:
                 main_menu = result
 
-            self.game.window.blit(backgrounds.BACKGROUND_MENU, (0, 0))
-            self.game.window.blit(backgrounds.LOGO, (270, 50))
+            self.game.window.blit(backgrounds.background_menu, (0, 0))
+            self.game.window.blit(backgrounds.logo, (270, 50))
 
             self.buttons["start"].draw_on_screen(self.game.window)
             self.buttons["options"].draw_on_screen(self.game.window)
@@ -140,8 +140,8 @@ class Menu:
             if result is not None:
                 return result
 
-            self.game.window.blit(male_player.CREATURE_IMAGE, (310, 150))
-            self.game.window.blit(female_player.CREATURE_IMAGE, (500, 150))
+            self.game.window.blit(male_player.creature_image, (310, 150))
+            self.game.window.blit(female_player.creature_image, (500, 150))
 
             self.buttons["char_male"].draw_on_screen(self.game.window)
             self.buttons["char_female"].draw_on_screen(self.game.window)

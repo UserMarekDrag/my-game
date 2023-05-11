@@ -1,4 +1,5 @@
-import os
+from pathlib import Path
+
 import pygame
 from config import Config
 
@@ -33,14 +34,22 @@ class Backgrounds:
             self.init_backgrounds()
 
     def init_backgrounds(self):
+        base_dir = Path(__file__).resolve().parent.parent.parent
         try:
+            background_game_file = base_dir / 'game' / 'Assets' / 'background_game.png'
             self.background_game = pygame.transform.scale(pygame.image.load(
-                os.path.join('../Assets', 'background_game.png')), (config.WIDTH, config.HEIGHT))
+                str(background_game_file)), (config.WIDTH, config.HEIGHT))
+
+            background_stats_file = base_dir / 'game' / 'Assets' / 'background_stats.png'
             self.background_stats = pygame.transform.scale(pygame.image.load(
-                os.path.join('../Assets', 'background_stats.png')), (config.WIDTH, config.HEIGHT))
+                str(background_stats_file)), (config.WIDTH, config.HEIGHT))
+
+            background_menu_file = base_dir / 'game' / 'Assets' / 'background_menu.png'
             self.background_menu = pygame.transform.scale(pygame.image.load(
-                os.path.join('../Assets', 'background_menu.png')), (config.WIDTH, config.HEIGHT))
+                str(background_menu_file)), (config.WIDTH, config.HEIGHT))
+
+            logo_file = base_dir / 'game' / 'Assets' / 'logo.png'
             self.logo = pygame.transform.scale(pygame.image.load(
-                os.path.join('../Assets', 'logo.png')), (350, 200))
+                str(logo_file)), (350, 200))
         except pygame.error as error:
             print('Error while loading sounds:', error)

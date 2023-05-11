@@ -1,4 +1,3 @@
-import pygame
 from config import Config
 from sounds import Sounds
 from creature import Creature
@@ -85,7 +84,7 @@ class Monster(Creature, Drawable, Collidable, Updatable):
             bullet = Bullet(
                 direction, self.rect.x + self.width // 2, self.rect.y + self.height // 2, config.BOSS_BULLET_VEL, config.RED)
             self.monster_bullets.append(bullet)
-            sounds.BULLET_FIRE_SOUND.play()
+            sounds.bullet_fire_sound.play()
 
     def check_direction(self, player):
         """

@@ -2,27 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4deec39d-f244-4ecb-b57b-bdb2f936f59f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.pylintrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backgrounds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backgrounds.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bullet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/bullet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/button.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/creature.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/creature.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/display_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/display_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/display_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/display_text.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/enemy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/events_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/events_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interfaces.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/level_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/level_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/levels.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/levels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/menu_commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu_commands.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monster.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monster.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sounds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/backgrounds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/backgrounds.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/creature.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/creature.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/display_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/display_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/enemy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/level_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/level_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu_commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu_commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/monster.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monster.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sounds.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sounds.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

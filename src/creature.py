@@ -1,6 +1,8 @@
-import pygame, os
-from config import Config
+from pathlib import Path
 from abc import ABC, abstractmethod
+
+import pygame
+from config import Config
 
 
 config = Config()
@@ -19,10 +21,12 @@ class Creature(ABC):
         self.health = health
 
         # Loading and scaling the image of the creature
-        self.CREATURE_IMAGE = pygame.image.load(
-            os.path.join('../Assets', self.image_name))
+        base_dir = Path(__file__).resolve().parent.parent.parent
+        creature_file = base_dir / 'game' / 'Assets' / self.image_name
+        self.creature_image = pygame.image.load(
+            str(creature_file))
         self.CREATURE = pygame.transform.scale(
-            self.CREATURE_IMAGE, (self.width, self.height))
+            self.creature_image, (self.width, self.height))
 
         self.rect = self.CREATURE.get_rect()
         self.rect.x = x

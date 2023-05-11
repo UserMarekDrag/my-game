@@ -1,4 +1,3 @@
-import pygame
 from config import Config
 from monster import Monster
 
@@ -11,17 +10,17 @@ class Bat(Monster):
     A class representing a bat monster.
 
     Attributes:
-        FIRST_POSITION_X (int): the initial x position of the monster.
-        FIRST_POSITION_Y (int): the initial y position of the monster.
-        SIZE_WIDTH (int): the width of the monster sprite.
-        SIZE_HEIGHT (int): the height of the monster sprite.
+        first_position_x (int): the initial x position of the monster.
+        first_position_y (int): the initial y position of the monster.
+        size_width (int): the width of the monster sprite.
+        size_height (int): the height of the monster sprite.
     """
     def __init__(self, x, y):
-        self.FIRST_POSITION_X = x
-        self.FIRST_POSITION_Y = y
-        self.SIZE_WIDTH = 80
-        self.SIZE_HEIGHT = 60
-        super().__init__(config.BAT_IMAGE, self.FIRST_POSITION_X, self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT, config.BAT_HEALTH)
+        self.first_position_x = x
+        self.first_position_y = y
+        self.size_width = 80
+        self.size_height = 60
+        super().__init__(config.BAT_IMAGE, self.first_position_x, self.first_position_y, self.size_width, self.size_height, config.BAT_HEALTH)
 
     def move(self, keys=None, target=None):
         """
@@ -71,17 +70,17 @@ class Mage(Monster):
     A class representing a mage monster.
 
     Attributes:
-        FIRST_POSITION_X (int): the initial x position of the monster.
-        FIRST_POSITION_Y (int): the initial y position of the monster.
-        SIZE_WIDTH (int): the width of the monster sprite.
-        SIZE_HEIGHT (int): the height of the monster sprite.
+        first_position_x (int): the initial x position of the monster.
+        first_position_y (int): the initial y position of the monster.
+        size_width (int): the width of the monster sprite.
+        size_height (int): the height of the monster sprite.
     """
     def __init__(self, x, y):
-        self.FIRST_POSITION_X = x
-        self.FIRST_POSITION_Y = y
-        self.SIZE_WIDTH = 60
-        self.SIZE_HEIGHT = 100
-        super().__init__(config.MAGE_IMAGE, self.FIRST_POSITION_X, self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT, config.MAGE_HEALTH)
+        self.first_position_x = x
+        self.first_position_y = y
+        self.size_width = 60
+        self.size_height = 100
+        super().__init__(config.MAGE_IMAGE, self.first_position_x, self.first_position_y, self.size_width, self.size_height, config.MAGE_HEALTH)
 
     def move(self, keys=None, target=None):
         """
@@ -109,20 +108,20 @@ class Boss(Monster):
     A class representing a boss monster.
 
     Attributes:
-        FIRST_POSITION_X (int): the initial x position of the monster.
-        FIRST_POSITION_Y (int): the initial y position of the monster.
-        SIZE_WIDTH (int): the width of the monster sprite.
-        SIZE_HEIGHT (int): the height of the monster sprite.
+        first_position_x (int): the initial x position of the monster.
+        first_position_y (int): the initial y position of the monster.
+        size_width (int): the width of the monster sprite.
+        size_height (int): the height of the monster sprite.
         position (str): the current position of the boss.
         time_break (bool): a flag that indicates if the boss is waiting or moving.
         time_step (int): the time left until the boss stops waiting.
     """
     def __init__(self):
-        self.FIRST_POSITION_X = 900
-        self.FIRST_POSITION_Y = 150
-        self.SIZE_WIDTH = 60
-        self.SIZE_HEIGHT = 100
-        super().__init__(config.BOSS_IMAGE, self.FIRST_POSITION_X, self.FIRST_POSITION_Y, self.SIZE_WIDTH, self.SIZE_HEIGHT, config.BOSS_HEALTH)
+        self.first_position_x = 900
+        self.first_position_y = 150
+        self.size_width = 60
+        self.size_height = 100
+        super().__init__(config.BOSS_IMAGE, self.first_position_x, self.first_position_y, self.size_width, self.size_height, config.BOSS_HEALTH)
         self.position = 'center'
         self.time_break = True
         self.time_step = 50

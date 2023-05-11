@@ -4,7 +4,7 @@ from enemy import Boss
 
 class LevelManager:
     def __init__(self):
-        self.level = 1
+        self.level = 0
         self.level_strategy = None
         self.enemies = []
 

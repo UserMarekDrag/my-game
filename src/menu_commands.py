@@ -1,6 +1,7 @@
-import pygame
 import sys
 from abc import ABC, abstractmethod
+
+import pygame
 from backgrounds import Backgrounds
 
 backgrounds = Backgrounds()
@@ -42,7 +43,7 @@ class OptionsCommand(MenuCommand):
     Command to open the character selection menu.
     """
     def execute(self):
-        self.menu.game.window.blit(backgrounds.BACKGROUND_MENU, (0, 0))
+        self.menu.game.window.blit(backgrounds.background_menu, (0, 0))
         pygame.display.update()
         pygame.time.wait(100)
         return self.menu.menu_choice_char()

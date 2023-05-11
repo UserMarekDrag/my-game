@@ -38,8 +38,8 @@ class DisplayManager:
         """
         Draw the game's background.
         """
-        self.window.blit(backgrounds.BACKGROUND_STATS, (0, 0))
-        self.window.blit(backgrounds.BACKGROUND_GAME, (0, 30))
+        self.window.blit(backgrounds.background_stats, (0, 0))
+        self.window.blit(backgrounds.background_game, (0, 30))
         self.clock.tick(config.FPS)
 
     def draw_characters(self, player, enemies):
