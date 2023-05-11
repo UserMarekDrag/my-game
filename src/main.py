@@ -1,10 +1,19 @@
-import pygame
+"""
+Main module - entry point for the game.
+"""
+
 import sys
+
+import pygame
+
 from game import Game
 from menu import Menu
 
 
 def main():
+    """
+    Main function that starts the game.
+    """
     try:
         pygame.init()
 
@@ -16,8 +25,8 @@ def main():
 
         pygame.quit()
         sys.exit()
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    except Exception as error:
+        print(f"An error occurred: {error}")
 
     finally:
         pygame.quit()

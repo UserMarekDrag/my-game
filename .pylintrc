@@ -1,0 +1,25 @@
+[MESSAGES CONTROL]
+# Warnings for naming conventions
+variable-rgx=[a-z_][a-z0-9_]{0,30}$
+const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
+function-rgx=[a-z_][a-z0-9_]{0,30}$
+argument-rgx=[a-z_][a-z0-9_]{0,30}$
+
+[pylint]
+# Enable PEP8 checks
+extension-pkg-whitelist=pygame
+max-line-length=79
+
+[pylint.typecheck]
+# Enable type checking
+generated-members=pygame.*, pg_*
+
+[pylint.design]
+# Enable design checks
+max-branches=20
+max-statements=100
+min-public-methods=0
+min-similarity-lines=4
+
+# Disable some warnings
+disable=C0114,C0115,C0116,C0301,C0325,C0412,C1801

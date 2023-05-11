@@ -35,8 +35,8 @@ class Sounds:
         pygame.mixer.init()
         try:
             self.BULLET_HIT_SOUND = pygame.mixer.Sound(
-                os.path.join('Assets', 'Grenade+1.mp3'))
+                os.path.join('../Assets', 'Grenade+1.mp3'))
             self.BULLET_FIRE_SOUND = pygame.mixer.Sound(
-                os.path.join('Assets', 'Gun+Silencer.mp3'))
+                os.path.join('../Assets', 'Gun+Silencer.mp3'))
         except pygame.error as e:
             print('Error while loading sounds:', e)

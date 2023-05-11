@@ -20,7 +20,7 @@ class Creature(ABC):
 
         # Loading and scaling the image of the creature
         self.CREATURE_IMAGE = pygame.image.load(
-            os.path.join('Assets', self.image_name))
+            os.path.join('../Assets', self.image_name))
         self.CREATURE = pygame.transform.scale(
             self.CREATURE_IMAGE, (self.width, self.height))
 
