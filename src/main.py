@@ -6,8 +6,8 @@ import sys
 
 import pygame
 
-from game import Game
-from menu import Menu
+from src.game import Game
+from src.menu import Menu
 
 
 def main():

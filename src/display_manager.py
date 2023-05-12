@@ -1,7 +1,7 @@
 import pygame
-from config import Config
-from backgrounds import Backgrounds
-from display_text import DisplayText
+from src.config import Config
+from src.backgrounds import Backgrounds
+from src.display_text import DisplayText
 
 
 backgrounds = Backgrounds()

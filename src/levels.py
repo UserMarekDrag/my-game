@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from enemy import Bat, Mage, Boss
+from src.enemy import Bat, Mage, Boss
 
 
 class LevelStrategy(ABC):

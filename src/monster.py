@@ -1,8 +1,8 @@
-from config import Config
-from sounds import Sounds
-from creature import Creature
-from bullet import Bullet
-from interfaces import Drawable, Collidable, Updatable
+from src.config import Config
+from src.sounds import Sounds
+from src.creature import Creature
+from src.bullet import Bullet
+from src.interfaces import Drawable, Collidable, Updatable
 
 
 config = Config()

@@ -1,5 +1,5 @@
-from levels import LevelOneStrategy, LevelTwoStrategy, LevelThreeStrategy, LevelFourStrategy, LevelFiveStrategy
-from enemy import Boss
+from src.levels import LevelOneStrategy, LevelTwoStrategy, LevelThreeStrategy, LevelFourStrategy, LevelFiveStrategy
+from src.enemy import Boss
 
 
 class LevelManager:

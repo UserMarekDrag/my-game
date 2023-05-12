@@ -1,10 +1,11 @@
 import pygame
-from config import Config
-from player import Player
-from backgrounds import Backgrounds
-from level_manager import LevelManager
-from display_manager import DisplayManager
-from events_manager import EventsManager
+from src.config import Config
+from src.player import Player
+from src.backgrounds import Backgrounds
+from src.level_manager import LevelManager
+from src.display_manager import DisplayManager
+from src.events_manager import EventsManager
+
 
 backgrounds = Backgrounds()
 config = Config()

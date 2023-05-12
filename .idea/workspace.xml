@@ -3,6 +3,22 @@
   <component name="ChangeListManager">
     <list default="true" id="4deec39d-f244-4ecb-b57b-bdb2f936f59f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.pylintrc" beforeDir="false" afterPath="$PROJECT_DIR$/.pylintrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/bullet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/bullet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/creature.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/creature.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/display_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/display_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/display_text.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/display_text.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/enemy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/events_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/events_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/level_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/level_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/levels.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/levels.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/menu_commands.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu_commands.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/monster.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/monster.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,28 +62,7 @@
       <recent name="C:\PythonProject\Pygame\Game\working\chatgpt_1" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests for tests.test_backgrounds.TestBackgrounds">
-    <configuration name="config" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="Game" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\PythonProject\Pygame\Game\src\config.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.main">
     <configuration name="creature" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Game" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -89,7 +84,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="player" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Game" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -97,17 +92,31 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\PythonProject\Pygame\Game\src\player.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_main.test_main" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="Game" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_main.test_main&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="Python tests for tests.test_backgrounds.TestBackgrounds" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
@@ -139,19 +148,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.config" />
+      <item itemvalue="Python.main" />
       <item itemvalue="Python.creature" />
-      <item itemvalue="Python.player" />
+      <item itemvalue="Python tests.Python tests for test_main.test_main" />
       <item itemvalue="Python tests.Python tests for tests.test_backgrounds.TestBackgrounds" />
       <item itemvalue="Python tests.Python tests for tests.test_backgrounds.TestBackgrounds.test_singleton_instance" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python tests.Python tests for test_main.test_main" />
         <item itemvalue="Python tests.Python tests for tests.test_backgrounds.TestBackgrounds.test_singleton_instance" />
         <item itemvalue="Python tests.Python tests for tests.test_backgrounds.TestBackgrounds" />
         <item itemvalue="Python.creature" />
-        <item itemvalue="Python.player" />
-        <item itemvalue="Python.config" />
       </list>
     </recent_temporary>
   </component>

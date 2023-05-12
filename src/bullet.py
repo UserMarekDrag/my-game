@@ -1,7 +1,7 @@
 import pygame
-from config import Config
-from sounds import Sounds
-from interfaces import Collidable, Drawable, Updatable
+from src.config import Config
+from src.sounds import Sounds
+from src.interfaces import Collidable, Drawable, Updatable
 
 config = Config()
 sounds = Sounds()

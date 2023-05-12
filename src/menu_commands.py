@@ -2,7 +2,7 @@ import sys
 from abc import ABC, abstractmethod
 
 import pygame
-from backgrounds import Backgrounds
+from src.backgrounds import Backgrounds
 
 backgrounds = Backgrounds()
 

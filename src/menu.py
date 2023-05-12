@@ -1,10 +1,10 @@
 import sys
 import pygame
-from button import ButtonBuilder
-from config import Config
-from backgrounds import Backgrounds
-from player import Player
-from menu_commands import StartGameCommand, OptionsCommand, QuitGameCommand, \
+from src.button import ButtonBuilder
+from src.config import Config
+from src.backgrounds import Backgrounds
+from src.player import Player
+from src.menu_commands import StartGameCommand, OptionsCommand, QuitGameCommand, \
     ChooseMaleCharacterCommand, ChooseFemaleCharacterCommand, RestartGameCommand
 
 config = Config()

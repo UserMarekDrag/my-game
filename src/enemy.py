@@ -1,5 +1,5 @@
-from config import Config
-from monster import Monster
+from src.config import Config
+from src.monster import Monster
 
 
 config = Config()

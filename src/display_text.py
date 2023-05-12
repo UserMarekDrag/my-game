@@ -1,4 +1,4 @@
-from config import Config
+from src.config import Config
 
 
 config = Config()

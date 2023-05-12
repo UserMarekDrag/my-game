@@ -9,6 +9,7 @@ argument-rgx=[a-z_][a-z0-9_]{0,30}$
 # Enable PEP8 checks
 extension-pkg-whitelist=pygame
 max-line-length=79
+disable=import-error
 
 [pylint.typecheck]
 # Enable type checking

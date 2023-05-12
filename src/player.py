@@ -1,9 +1,9 @@
 import pygame
-from creature import Creature
-from config import Config
-from sounds import Sounds
-from bullet import Bullet
-from interfaces import Collidable, Drawable, Updatable
+from src.creature import Creature
+from src.config import Config
+from src.sounds import Sounds
+from src.bullet import Bullet
+from src.interfaces import Collidable, Drawable, Updatable
 
 config = Config()
 sounds = Sounds()

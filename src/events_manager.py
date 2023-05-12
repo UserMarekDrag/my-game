@@ -1,6 +1,6 @@
 import pygame
-from enemy import Mage, Boss
-from monster import Monster
+from src.enemy import Mage, Boss
+from src.monster import Monster
 
 
 class EventsManager:
