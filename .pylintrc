@@ -23,4 +23,4 @@ min-public-methods=0
 min-similarity-lines=4
 
 # Disable some warnings
-disable=C0114,C0115,C0116,C0301,C0325,C0412,C1801,C0413,W0621
+disable=C0114,C0115,C0116,C0301,C0325,C0412,C1801,C0413,W0621,W0212
