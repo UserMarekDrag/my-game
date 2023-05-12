@@ -1,0 +1,70 @@
+@startuml
+title Game Structure Diagram
+
+class Game {
+  -window
+  -display_manager: DisplayManager
+  -events_manager: EventsManager
+  -clock
+  -run: bool
+  -stop: bool
+  -player
+  -level_manager: LevelManager
+  -menu: Menu
+  +check_winner()
+  +draw_winner_and_end_game(winner_text)
+  +who_win()
+  +new_game()
+  +next_level()
+  +main()
+}
+
+class DisplayManager {
+  -window
+  -clock
+  -display_text: DisplayText
+  +draw(player, level_manager)
+  +clear_screen()
+  +draw_background()
+  +draw_characters(player, enemies)
+  +draw_stats(player, level_manager)
+  +draw_winner(winner_text)
+  +draw_level(level_manager)
+}
+
+class DisplayText {
+  -window
+  -text
+  +txt_draw(number, width, height, name, content, font)
+  +display_text(width, height)
+}
+
+class EventsManager {
+  -window
+  -run: bool
+  +events(level_manager, player)
+  +handle_user_input(player)
+  +get_alive_enemies(level_manager)
+  +handle_enemy_shooting(level_manager, player)
+  +handle_enemy_moving(level_manager, player)
+  +handle_player_moving(player)
+  +handle_fighting(level_manager, player)
+  +handle_collision(level_manager, player)
+}
+
+class LevelManager {
+  -level: int
+  -level_strategy: LevelStrategy
+  -enemies: list
+  +get_enemies_for_stage()
+  +get_enemies()
+  +get_boss_hp()
+  +all_enemies_defeated()
+  +go_to_next_level()
+}
+
+Game --> DisplayManager
+Game --> EventsManager
+Game --> LevelManager
+DisplayManager --> DisplayText
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+title Level Strategy Diagram
+
+abstract class LevelStrategy {
+  +{abstract} create_enemies()
+}
+
+class LevelOneStrategy {
+  +create_enemies()
+}
+
+class LevelTwoStrategy {
+  +create_enemies()
+}
+
+class LevelThreeStrategy {
+  +create_enemies()
+}
+
+class LevelFourStrategy {
+  +create_enemies()
+}
+
+class LevelFiveStrategy {
+  +create_enemies()
+}
+
+LevelStrategy <|-- LevelOneStrategy
+LevelStrategy <|-- LevelTwoStrategy
+LevelStrategy <|-- LevelThreeStrategy
+LevelStrategy <|-- LevelFourStrategy
+LevelStrategy <|-- LevelFiveStrategy
+
+LevelManager --> LevelStrategy: uses strategy
+
+@enduml

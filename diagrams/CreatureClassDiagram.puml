@@ -1,0 +1,133 @@
+@startuml
+
+' The Creature class is a basic representation of all living beings in the game.
+class Creature {
+  -name: str
+  -image_name: str
+  -x: int
+  -y: int
+  -width: int
+  -height: int
+  -health: int
+  +__init__(self, name, image_name, x, y, width, height, health)
+  +move(self, keys=None, target=None): void
+  +reset(self, position_x, position_y): void
+  +draw_on_screen(self, win): void
+  +take_damage(self): void
+}
+
+' Drawable is an interface for all objects that can be drawn on the screen.
+interface Drawable {
+  +draw(self, win): void
+}
+
+' Collidable is an interface for all objects that can participate in collisions.
+interface Collidable {
+  +check_collision(self, other, type_other): void
+}
+
+' Updatable is an interface for all objects that have a state which can be updated over time.
+interface Updatable {
+  +update(self): void
+}
+
+' The Player class represents the user-controlled character in the game.
+class Player {
+  -first_position_x: int
+  -first_position_y: int
+  -size_width: int
+  -size_height: int
+  -health: int
+  -bullets: list
+  +__init__(self, image_name)
+  +reset(self, position_x=350, position_y=150): void
+  +shoot(self, event): void
+  +update(self): void
+  +draw(self, win): void
+  +handle_bullets(self, enemy, win): void
+  +check_collision(self, other, type_other): void
+  +move(self, keys=None, target=None): void
+  +collision(self, enemy): void
+}
+
+' The Monster class represents enemies in the game.
+class Monster {
+  -monster_bullets: list
+  +__init__(self, image_name, x, y, width, height, health)
+  +reset(self, position_x, position_y): void
+  +update(self): void
+  +draw(self, win): void
+  +move(self, keys=None, target=None): void
+  +check_collision(self, other, player): void
+  +shoot(self, player): void
+  +check_direction(self, player): void
+  +handle_monster_bullets(self, player, win): void
+}
+
+' The Bullet class represents bullets shot by the player and monsters.
+class Bullet {
+  -direction: int
+  -bullet_vel: int
+  -color: str
+  +__init__(self, direction, x, y, bullet_vel, color)
+  +draw(self, win): void
+  +is_out_of_screen(self): void
+  +collides_with(self, enemy): void
+  +check_collision(self, other, type_other): void
+  +update(self): void
+}
+
+' The Bat class represents a type of monster.
+class Bat {
+  +__init__(self, x, y)
+  +move(self, keys=None, target=None): void
+  +reset(self, position_x, position_y): void
+  +shoot(self, player): void
+  +handle_monster_bullets(self, player, win): void
+}
+
+' The Mage class represents a type of monster.
+class Mage {
+  +__init__(self, x, y)
+  +move(self, keys=None, target=None): void
+  +reset(self, position_x, position_y): void
+}
+
+
+' The Boss class represents the boss monster in the game.
+class Boss {
+  +__init__(self)
+  +waiting(self): void
+  +move(self, keys=None, target=None): void
+  +reset(self, position_x, position_y): void
+}
+
+' The Player class extends the Creature class and implements the Drawable, Collidable, and Updatable interfaces.
+Creature <|-- Player
+Drawable <|.. Player
+Collidable <|.. Player
+Updatable <|.. Player
+
+' The Monster class extends the Creature class and implements the Drawable, Collidable, and Updatable interfaces.
+Creature <|-- Monster
+Drawable <|.. Monster
+Collidable <|.. Monster
+Updatable <|.. Monster
+
+' The Bullet class implements the Drawable, Collidable, and Updatable interfaces.
+Drawable <|.. Bullet
+Collidable <|.. Bullet
+Updatable <|.. Bullet
+
+' The Player class has a relationship with the Bullet class.
+Player *-- "1" Bullet
+' The Monster class has a relationship with the Bullet class.
+Monster *-- "1" Bullet
+
+' The Bat, Mage, and Boss classes extend the Monster class.
+Monster <|-- Bat
+Monster <|-- Mage
+Monster <|-- Boss
+@enduml
+
+@enduml

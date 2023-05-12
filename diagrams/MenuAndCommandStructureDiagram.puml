@@ -1,0 +1,83 @@
+@startuml
+title Menu and Command Structure Diagram
+
+class Menu {
+  -game: Game
+  -character_choice: str
+  -character_dictionary: dict
+  -buttons: dict
+  +character_update()
+  +create_buttons()
+  +handle_button_click(button, mouse_position, mouse_pressed)
+  +menu_screen()
+  +menu_choice_char()
+  +menu_end(draw_text)
+}
+
+abstract class MenuCommand {
+  -menu: Menu
+  +{abstract} execute()
+}
+
+class StartGameCommand {
+  +execute()
+}
+
+class RestartGameCommand {
+  +execute()
+}
+
+class OptionsCommand {
+  +execute()
+}
+
+class QuitGameCommand {
+  +execute()
+}
+
+class ChooseMaleCharacterCommand {
+  +execute()
+}
+
+class ChooseFemaleCharacterCommand {
+  +execute()
+}
+
+class Button {
+  -font_size
+  -font
+  -position_x: int
+  -position_y: int
+  -width: int
+  -height: int
+  -font_ground_color
+  -background_color
+  -image
+  -rect
+  +is_pressed(position, pressed)
+  +draw_on_screen(window)
+}
+
+class ButtonBuilder {
+  -_button: Button
+  +reset()
+  +set_position(position_x, position_y)
+  +set_content(content)
+  +set_action(action)
+  +build()
+}
+
+MenuCommand <|-- StartGameCommand
+MenuCommand <|-- RestartGameCommand
+MenuCommand <|-- OptionsCommand
+MenuCommand <|-- QuitGameCommand
+MenuCommand <|-- ChooseMaleCharacterCommand
+MenuCommand <|-- ChooseFemaleCharacterCommand
+
+Menu "1" --> "*" Button: contains
+Menu --> Game
+
+ButtonBuilder ..> Button: builds
+Button o--> MenuCommand : uses
+
+@enduml
