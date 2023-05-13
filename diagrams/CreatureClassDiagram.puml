@@ -1,5 +1,5 @@
 @startuml
-
+title Creature Class Diagram
 ' The Creature class is a basic representation of all living beings in the game.
 class Creature {
   -name: str
@@ -128,6 +128,4 @@ Monster *-- "1" Bullet
 Monster <|-- Bat
 Monster <|-- Mage
 Monster <|-- Boss
-@enduml
-
 @enduml
