@@ -51,10 +51,10 @@ After running the unit tests, a pytest report has been generated in HTML format.
 
 Diagrams have been prepared in PlantUML format to illustrate the project's architecture and structure. These visual representations help in understanding the relationships between different classes and their interactions. Click on the thumbnail below to view the full-size diagram or access the corresponding PlantUML file.
 
-- [<img alt="CreatureClassDiagram" src="./diagrams/CreatureClassDiagram.PNG" width="400"/>](./diagrams/CreatureClassDiagram.puml)
-- [<img alt="GameStructureDiagram" src="./diagrams/GameStructureDiagram.PNG" width="400"/>](./diagrams/GameStructureDiagram.puml)
-- [<img alt="LevelStrategyDiagram" src="./diagrams/LevelStrategyDiagram.PNG" width="400"/>](./diagrams/LevelStrategyDiagram.puml)
-- [<img alt="MenuAndCommandStructureDiagram" src="./diagrams/MenuAndCommandStructureDiagram.PNG" width="400"/>](./diagrams/MenuAndCommandStructureDiagram.puml)
+<div><img alt="CreatureClassDiagram" src="./diagrams/CreatureClassDiagram.PNG" width="800"/></div>
+<div><img alt="GameStructureDiagram" src="./diagrams/GameStructureDiagram.PNG" width="800"/></div>
+<div><img alt="LevelStrategyDiagram" src="./diagrams/LevelStrategyDiagram.PNG" width="800"/></div>
+<div><img alt="MenuAndCommandStructureDiagram" src="./diagrams/MenuAndCommandStructureDiagram.PNG" width="800"/></div>
 
 
 Click on the thumbnail to view the full-size diagram, or click the link to open the PlantUML file in `.puml` format.
