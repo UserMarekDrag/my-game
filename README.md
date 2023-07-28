@@ -2,7 +2,7 @@
 The game was created as a part of a personal project aimed at developing programming skills and pursuing personal interests.
 
 ## Gameplay
-Feel free to watch the gameplay on the YouTube platform ([link](https://youtu.be/O5XfMjvGVHM)).
+Feel free to watch the gameplay on the YouTube platform ([link](https://youtu.be/P75WP1kLdeY)).
 
 ## Storyline
 As a beginner adventurer, you set out on your first mission. The first location should be easy and predictable... but it won't be. You will have to fight for survival and until you defeat the wizard, you will not experience peace in this world... Are you ready for this adventure? 
